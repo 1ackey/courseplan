@@ -1,0 +1,172 @@
+site_name: 英语学院课程信息
+site_description: 对外经济贸易大学英语学院课程信息平台 - 课程内容与考核方式查询
+site_author: SIS@UIBE
+repo_url: https://github.com/SIS-UIBE/courseplan
+repo_name: SIS-UIBE/courseplan
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  language: zh
+  features:
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
+    - search.suggest
+    - search.highlight
+    - search.share
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: 切换暗色模式
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: 切换亮色模式
+  font:
+    text: Roboto
+    code: Roboto Mono
+
+extra_css:
+  - stylesheets/extra.css
+
+plugins:
+  - search:
+      lang: zh
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - attr_list
+  - md_in_html
+
+nav:
+  - 首页: index.md
+  - 基础必修:
+    - categories/basic-required/index.md
+    - categories/basic-required/ENG183.md
+    - categories/basic-required/ENG184.md
+    - categories/basic-required/ENG185.md
+    - categories/basic-required/ENG186.md
+    - categories/basic-required/ENG493.md
+    - categories/basic-required/ENG775.md
+    - categories/basic-required/ENG776.md
+    - categories/basic-required/ENG777.md
+    - categories/basic-required/ENG778.md
+    - categories/basic-required/ENG779.md
+    - categories/basic-required/ENG780.md
+    - categories/basic-required/ENG781.md
+    - categories/basic-required/ENG783.md
+    - categories/basic-required/ENG786.md
+    - categories/basic-required/ENG790.md
+    - categories/basic-required/ESP320.md
+    - categories/basic-required/ESP321.md
+    - categories/basic-required/FRA343.md
+    - categories/basic-required/FRA344.md
+    - categories/basic-required/GER348.md
+    - categories/basic-required/GER349.md
+    - categories/basic-required/JAP325.md
+    - categories/basic-required/JAP326.md
+  - 基础选修:
+    - categories/basic-elective/index.md
+    - categories/basic-elective/CLL402.md
+    - categories/basic-elective/ENG187.md
+    - categories/basic-elective/ENG188.md
+    - categories/basic-elective/ENG194.md
+    - categories/basic-elective/ENG263.md
+    - categories/basic-elective/ENG299.md
+    - categories/basic-elective/ENG301.md
+    - categories/basic-elective/ENG323.md
+    - categories/basic-elective/ENG356.md
+    - categories/basic-elective/ENG359.md
+    - categories/basic-elective/ENG360.md
+    - categories/basic-elective/ENG361.md
+    - categories/basic-elective/ENG463.md
+    - categories/basic-elective/ENG465.md
+    - categories/basic-elective/ENG470.md
+    - categories/basic-elective/ENG487.md
+    - categories/basic-elective/ENG491.md
+    - categories/basic-elective/ENG526.md
+    - categories/basic-elective/ENG540.md
+    - categories/basic-elective/ENG599.md
+    - categories/basic-elective/ENG628.md
+    - categories/basic-elective/ENG631.md
+    - categories/basic-elective/ENG633.md
+    - categories/basic-elective/ENG645.md
+    - categories/basic-elective/ENG648.md
+    - categories/basic-elective/ENG733.md
+    - categories/basic-elective/ENG734.md
+    - categories/basic-elective/ENG742.md
+    - categories/basic-elective/ENG756.md
+    - categories/basic-elective/ENG766.md
+    - categories/basic-elective/ENG772.md
+    - categories/basic-elective/ENG773.md
+    - categories/basic-elective/ENG784.md
+    - categories/basic-elective/ENG787.md
+    - categories/basic-elective/ENG794.md
+    - categories/basic-elective/ENG795.md
+    - categories/basic-elective/ENG796.md
+    - categories/basic-elective/ENG799.md
+    - categories/basic-elective/ENG800.md
+    - categories/basic-elective/ENG807.md
+    - categories/basic-elective/ENG808.md
+    - categories/basic-elective/ENG809.md
+    - categories/basic-elective/ENG810.md
+    - categories/basic-elective/ENG812.md
+    - categories/basic-elective/ENG813.md
+    - categories/basic-elective/ENG814.md
+    - categories/basic-elective/ENG815.md
+    - categories/basic-elective/ENG816.md
+    - categories/basic-elective/ENG817.md
+    - categories/basic-elective/ENG819.md
+    - categories/basic-elective/ENG823.md
+    - categories/basic-elective/ENG827.md
+    - categories/basic-elective/ENG848.md
+    - categories/basic-elective/ENT307.md
+    - categories/basic-elective/HUM428.md
+  - 专业方向课:
+    - categories/major-direction/index.md
+    - categories/major-direction/ENG357.md
+    - categories/major-direction/ENG366.md
+    - categories/major-direction/ENG450.md
+    - categories/major-direction/ENG519.md
+    - categories/major-direction/ENG765.md
+    - categories/major-direction/ENG797.md
+    - categories/major-direction/ENG798.md
+    - categories/major-direction/ENG818.md
+    - categories/major-direction/ENG820.md
+    - categories/major-direction/ENG821.md
+    - categories/major-direction/ENG822.md
+    - categories/major-direction/ENG824.md
+    - categories/major-direction/ENG831.md
+    - categories/major-direction/ENG833.md
+    - categories/major-direction/ENG834.md
+    - categories/major-direction/ENG836.md
+    - categories/major-direction/ENG837.md
+    - categories/major-direction/ENG845.md
+  - 实验课:
+    - categories/lab/index.md
+    - categories/lab/ENG495.md
+    - categories/lab/ENG531.md
+    - categories/lab/ENG549.md
+    - categories/lab/ENG598.md
+    - categories/lab/ENG740.md
+    - categories/lab/ENG838.md
+    - categories/lab/ENG839.md
+    - categories/lab/ENG846.md
+    - categories/lab/ENG847.md
+  - 教师索引: teachers/index.md
+  - 贡献指南: contributing.md
+  - 关于本站: about.md

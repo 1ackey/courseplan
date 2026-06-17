@@ -1,0 +1,99 @@
+/* 首页英雄区域 */
+.hero {
+  text-align: center;
+  padding: 48px 16px 32px;
+}
+
+.hero-search {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.hero-links {
+  margin-top: 32px;
+  font-size: 14px;
+  color: var(--md-default-fg-color--light);
+}
+
+.hero-links a {
+  margin: 0 4px;
+}
+
+/* 移动端：教学进度表转为卡片式布局 */
+@media screen and (max-width: 768px) {
+  .schedule-table {
+    display: block;
+    overflow-x: visible;
+  }
+
+  .schedule-table thead {
+    display: none;
+  }
+
+  .schedule-table tbody,
+  .schedule-table tr {
+    display: block;
+  }
+
+  .schedule-table tr {
+    margin-bottom: 12px;
+    padding: 12px;
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 6px;
+    background: var(--md-code-bg-color);
+  }
+
+  .schedule-table td {
+    display: block;
+    padding: 4px 0;
+    border: none;
+    font-size: 14px;
+  }
+
+  .schedule-table td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    display: inline-block;
+    width: 80px;
+    color: var(--md-typeset-color);
+  }
+}
+
+/* 课程详情页元信息表样式 */
+.course-meta table {
+  width: 100%;
+}
+
+.course-meta td:first-child {
+  font-weight: 700;
+  white-space: nowrap;
+  width: 150px;
+}
+
+/* 索引页课程列表样式 */
+.course-list {
+  list-style: none;
+  padding: 0;
+}
+
+.course-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.course-list li:last-child {
+  border-bottom: none;
+}
+
+.course-list .course-code {
+  font-family: var(--md-code-font-family);
+  font-size: 13px;
+  color: var(--md-default-fg-color--light);
+  margin-left: 8px;
+}
+
+.course-list .course-meta-text {
+  font-size: 13px;
+  color: var(--md-default-fg-color--light);
+  margin-left: 8px;
+}

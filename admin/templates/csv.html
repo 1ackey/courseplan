@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}CSV 导入导出{% endblock %}
+{% block content %}
+<h1>CSV 导入 / 导出</h1>
+<p style="color:var(--gray-500);margin-bottom:24px;">非技术人员可在 Excel / Google Sheets 中批量编辑数据，通过 CSV 文件导入。</p>
+
+<div class="detail-section">
+    <h2 style="margin-top:0;">开课记录</h2>
+    <p>导出所有开课记录的基本信息（课程、教师、学期、课时、考核方式）。</p>
+    <a href="{{ url_for('csv_export_offerings') }}" class="btn btn-outline">导出开课记录 CSV</a>
+</div>
+
+<div class="detail-section">
+    <h2 style="margin-top:0;">教学进度（周计划）</h2>
+    <p>导出所有课程的每周教学计划，可在 Excel 中编辑后重新导入。</p>
+    <div style="display:flex;gap:10px;">
+        <a href="{{ url_for('csv_export_weekly_plans') }}" class="btn btn-outline">导出全部教学计划</a>
+        <a href="{{ url_for('csv_export_weekly_plan_template') }}" class="btn btn-outline">下载导入模板</a>
+    </div>
+
+    <h3 style="margin-top:20px;">导入教学进度</h3>
+    <p style="font-size:13px;color:var(--gray-500);">
+        上传 CSV 文件批量导入教学计划。CSV 需包含以下列：
+        <code>course_code, teacher_name, semester_name, week_number, date, hours, teaching_method, content, notes</code>
+    </p>
+    <form method="post" action="{{ url_for('csv_import_weekly_plans') }}" enctype="multipart/form-data" style="margin-top:12px;">
+        <div class="form-group">
+            <input type="file" name="file" accept=".csv" required>
+        </div>
+        <button type="submit" class="btn btn-primary">上传并导入</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}课程管理{% endblock %}
+{% block content %}
+<div class="flex-between mb-16">
+    <h1>课程管理</h1>
+    <a href="{{ url_for('course_new') }}" class="btn btn-primary">+ 添加课程</a>
+</div>
+
+<div class="filter-bar">
+    <a href="{{ url_for('course_list') }}" class="btn btn-sm {% if not current_category %}btn-primary{% else %}btn-outline{% endif %}">全部</a>
+    {% for cat in categories %}
+    <a href="{{ url_for('course_list', category=cat) }}" class="btn btn-sm {% if current_category == cat %}btn-primary{% else %}btn-outline{% endif %}">{{ cat }}</a>
+    {% endfor %}
+</div>
+
+{% if courses %}
+<table>
+    <thead>
+        <tr>
+            <th>课程代码</th>
+            <th>课程名称</th>
+            <th>类别</th>
+            <th>子类别</th>
+            <th>开课学院</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for c in courses %}
+        <tr>
+            <td><code>{{ c.code }}</code></td>
+            <td>{{ c.name }}</td>
+            <td><span class="badge">{{ c.category }}</span></td>
+            <td>{{ c.subcategory or '-' }}</td>
+            <td>{{ c.department or '-' }}</td>
+            <td class="table-actions">
+                <a href="{{ url_for('course_edit', course_id=c.id) }}" class="btn btn-sm btn-outline">编辑</a>
+                <form method="post" action="{{ url_for('course_delete', course_id=c.id) }}" onsubmit="return confirm('确定删除 {{ c.name }}？')">
+                    <button class="btn btn-sm btn-danger">删除</button>
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="empty-state">暂无课程数据</div>
+{% endif %}
+{% endblock %}

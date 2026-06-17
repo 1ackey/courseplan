@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}投稿审核 - CoursePlan 管理后台{% endblock %}
+{% block content %}
+<h1>投稿审核</h1>
+
+<div style="display: flex; gap: 8px; margin-bottom: 24px;">
+    <a href="{{ url_for('submission_list') }}" class="btn btn-sm" style="background: {% if not filter_status %}var(--sidebar-bg){% else %}#eee{% endif %}; color: {% if not filter_status %}#fff{% else %}#333{% endif %};">全部</a>
+    <a href="?status=pending" class="btn btn-sm" style="background: {% if filter_status == 'pending' %}var(--sidebar-bg){% else %}#eee{% endif %}; color: {% if filter_status == 'pending' %}#fff{% else %}#333{% endif %};">待审核</a>
+    <a href="?status=reviewed" class="btn btn-sm" style="background: {% if filter_status == 'reviewed' %}#16a34a{% else %}#eee{% endif %}; color: {% if filter_status == 'reviewed' %}#fff{% else %}#333{% endif %};">已审核</a>
+    <a href="?status=imported" class="btn btn-sm" style="background: {% if filter_status == 'imported' %}#2563eb{% else %}#eee{% endif %}; color: {% if filter_status == 'imported' %}#fff{% else %}#333{% endif %};">已导入</a>
+    <a href="?status=rejected" class="btn btn-sm" style="background: {% if filter_status == 'rejected' %}#dc2626{% else %}#eee{% endif %}; color: {% if filter_status == 'rejected' %}#fff{% else %}#333{% endif %};">已拒绝</a>
+</div>
+
+{% if submissions %}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>课程代码</th>
+            <th>课程名称</th>
+            <th>教师</th>
+            <th>学期</th>
+            <th>提交者</th>
+            <th>状态</th>
+            <th>提交时间</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in submissions %}
+        <tr>
+            <td>{{ s.id }}</td>
+            <td>{{ s.course_code }}</td>
+            <td>{{ s.course_name }}</td>
+            <td>{{ s.teacher_name }}</td>
+            <td>{{ s.semester_name }}</td>
+            <td>{{ s.submitter_name or '匿名' }}</td>
+            <td>
+                {% if s.status == 'pending' %}
+                <span class="badge badge-warning">待审核</span>
+                {% elif s.status == 'reviewed' %}
+                <span class="badge badge-success">已审核</span>
+                {% elif s.status == 'imported' %}
+                <span class="badge badge-info">已导入</span>
+                {% elif s.status == 'rejected' %}
+                <span class="badge badge-danger">已拒绝</span>
+                {% endif %}
+            </td>
+            <td>{{ s.created_at }}</td>
+            <td>
+                <a href="{{ url_for('submission_detail', submission_id=s.id) }}" class="btn btn-sm">查看</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p style="color: #999; text-align: center; padding: 48px 0;">暂无投稿</p>
+{% endif %}
+{% endblock %}
