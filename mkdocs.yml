@@ -1,8 +1,8 @@
 site_name: 英语学院课程信息
 site_description: 对外经济贸易大学英语学院课程信息平台 - 课程内容与考核方式查询
 site_author: SIS@UIBE
-repo_url: https://github.com/SIS-UIBE/courseplan
-repo_name: SIS-UIBE/courseplan
+repo_url: https://github.com/1ackey/courseplan
+repo_name: 1ackey/courseplan
 edit_uri: edit/main/docs/
 
 theme:
