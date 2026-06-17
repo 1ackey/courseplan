@@ -19,7 +19,6 @@
             <li><a href="{{ url_for('course_list') }}" class="{% if request.path.startswith('/courses') %}active{% endif %}">课程管理</a></li>
             <li><a href="{{ url_for('offering_list') }}" class="{% if request.path.startswith('/offerings') %}active{% endif %}">开课记录</a></li>
             <li class="nav-section">工具</li>
-            <li><a href="{{ url_for('submission_list') }}" class="{% if request.path.startswith('/submissions') %}active{% endif %}">投稿审核</a></li>
             <li><a href="{{ url_for('export_page') }}" class="{% if request.path == '/export' %}active{% endif %}">导出 Markdown</a></li>
             <li><a href="{{ url_for('csv_page') }}" class="{% if request.path == '/csv' %}active{% endif %}">CSV 导入导出</a></li>
         </ul>

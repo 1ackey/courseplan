@@ -59,24 +59,3 @@ CREATE TABLE IF NOT EXISTS weekly_plans (
     sort_order INTEGER DEFAULT 0,
     FOREIGN KEY (offering_id) REFERENCES course_offerings(id) ON DELETE CASCADE
 );
-
-CREATE TABLE IF NOT EXISTS submissions (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    course_code TEXT NOT NULL,
-    course_name TEXT NOT NULL,
-    teacher_name TEXT NOT NULL,
-    semester_name TEXT NOT NULL,
-    total_hours INTEGER,
-    weekly_hours INTEGER,
-    teaching_weeks INTEGER,
-    assessment_method TEXT,
-    textbooks TEXT,
-    weekly_plans TEXT,
-    info_source TEXT,
-    submitter_name TEXT,
-    submitter_contact TEXT,
-    notes TEXT,
-    status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending', 'reviewed', 'imported', 'rejected')),
-    created_at TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
-    reviewed_at TEXT
-);

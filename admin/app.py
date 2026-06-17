@@ -2,29 +2,18 @@
 """Flask admin panel for CoursePlan database management."""
 import csv
 import io
-import json
 import os
-import smtplib
 import sys
 import sqlite3
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, Response
+from flask import Flask, render_template, request, redirect, url_for, flash, Response
 
-# Add project root to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from db.init_db import DB_PATH
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "courseplan-admin-secret-key")
-
-SMTP_HOST = os.environ.get("SMTP_HOST", "smtp.qq.com")
-SMTP_PORT = int(os.environ.get("SMTP_PORT", "465"))
-SMTP_USER = os.environ.get("SMTP_USER", "")
-SMTP_PASS = os.environ.get("SMTP_PASS", "")
-SMTP_TO = os.environ.get("SMTP_TO", "ja0key@qq.com")
 
 
 def get_db():
@@ -725,139 +714,6 @@ def csv_import_weekly_plans():
         flash(f"导入失败: {e}", "error")
 
     return redirect(url_for("csv_page"))
-
-
-def send_submission_email(submission_data):
-    if not SMTP_USER or not SMTP_PASS:
-        return False
-
-    body_parts = []
-    body_parts.append(f"课程代码: {submission_data.get('course_code', '')}")
-    body_parts.append(f"课程名称: {submission_data.get('course_name', '')}")
-    body_parts.append(f"任课教师: {submission_data.get('teacher_name', '')}")
-    body_parts.append(f"学期: {submission_data.get('semester_name', '')}")
-    body_parts.append(f"总课时: {submission_data.get('total_hours', '')}")
-    body_parts.append(f"周课时: {submission_data.get('weekly_hours', '')}")
-    body_parts.append(f"教学周数: {submission_data.get('teaching_weeks', '')}")
-    body_parts.append(f"考核方式: {submission_data.get('assessment_method', '')}")
-    body_parts.append(f"教材/参考书: {submission_data.get('textbooks', '')}")
-    body_parts.append(f"教学进度表: \n{submission_data.get('weekly_plans', '')}")
-    body_parts.append(f"信息来源: {submission_data.get('info_source', '')}")
-    body_parts.append(f"提交者: {submission_data.get('submitter_name', '')}")
-    body_parts.append(f"联系方式: {submission_data.get('submitter_contact', '')}")
-    body_parts.append(f"备注: {submission_data.get('notes', '')}")
-
-    body = "\n".join(body_parts)
-
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = f"[CoursePlan 投稿] {submission_data.get('course_code', '')} - {submission_data.get('course_name', '')}"
-    msg["From"] = SMTP_USER
-    msg["To"] = SMTP_TO
-    msg.attach(MIMEText(body, "plain", "utf-8"))
-
-    try:
-        with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT) as server:
-            server.login(SMTP_USER, SMTP_PASS)
-            server.sendmail(SMTP_USER, [SMTP_TO], msg.as_string())
-        return True
-    except Exception as e:
-        app.logger.error(f"Email send failed: {e}")
-        return False
-
-
-@app.route("/submit", methods=["GET", "POST"])
-def submission_new():
-    conn = get_db()
-    if request.method == "POST":
-        weekly_plans_text = request.form.get("weekly_plans", "").strip()
-        data = {
-            "course_code": request.form["course_code"].strip(),
-            "course_name": request.form["course_name"].strip(),
-            "teacher_name": request.form["teacher_name"].strip(),
-            "semester_name": request.form["semester_name"].strip(),
-            "total_hours": int(request.form.get("total_hours", 0) or 0),
-            "weekly_hours": int(request.form.get("weekly_hours", 0) or 0),
-            "teaching_weeks": int(request.form.get("teaching_weeks", 0) or 0),
-            "assessment_method": request.form["assessment_method"].strip(),
-            "textbooks": request.form.get("textbooks", "").strip(),
-            "weekly_plans": weekly_plans_text,
-            "info_source": request.form.get("info_source", "").strip(),
-            "submitter_name": request.form.get("submitter_name", "").strip(),
-            "submitter_contact": request.form.get("submitter_contact", "").strip(),
-            "notes": request.form.get("notes", "").strip(),
-        }
-
-        conn.execute(
-            """INSERT INTO submissions
-               (course_code, course_name, teacher_name, semester_name,
-                total_hours, weekly_hours, teaching_weeks, assessment_method,
-                textbooks, weekly_plans, info_source,
-                submitter_name, submitter_contact, notes)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-            (
-                data["course_code"], data["course_name"], data["teacher_name"],
-                data["semester_name"], data["total_hours"], data["weekly_hours"],
-                data["teaching_weeks"], data["assessment_method"],
-                data["textbooks"], data["weekly_plans"], data["info_source"],
-                data["submitter_name"], data["submitter_contact"], data["notes"],
-            ),
-        )
-        conn.commit()
-
-        send_submission_email(data)
-
-        flash("投稿已提交，感谢你的贡献！管理员审核后将导入系统。", "success")
-        conn.close()
-        return redirect(url_for("submission_new"))
-
-    courses = conn.execute("SELECT code, name FROM courses ORDER BY code").fetchall()
-    teachers = conn.execute("SELECT name FROM teachers ORDER BY name").fetchall()
-    semesters = conn.execute("SELECT name FROM semesters ORDER BY name DESC").fetchall()
-    conn.close()
-    return render_template("submission_form.html",
-                           courses=courses, teachers=teachers, semesters=semesters)
-
-
-@app.route("/submissions")
-def submission_list():
-    conn = get_db()
-    status_filter = request.args.get("status", "")
-    if status_filter:
-        submissions = conn.execute(
-            "SELECT * FROM submissions WHERE status=? ORDER BY created_at DESC",
-            (status_filter,),
-        ).fetchall()
-    else:
-        submissions = conn.execute(
-            "SELECT * FROM submissions ORDER BY created_at DESC"
-        ).fetchall()
-    conn.close()
-    return render_template("submissions.html", submissions=submissions, filter_status=status_filter)
-
-
-@app.route("/submissions/<int:submission_id>")
-def submission_detail(submission_id):
-    conn = get_db()
-    sub = conn.execute("SELECT * FROM submissions WHERE id=?", (submission_id,)).fetchone()
-    conn.close()
-    if not sub:
-        flash("投稿不存在", "error")
-        return redirect(url_for("submission_list"))
-    return render_template("submission_detail.html", submission=sub)
-
-
-@app.route("/submissions/<int:submission_id>/status", methods=["POST"])
-def submission_update_status(submission_id):
-    new_status = request.form["status"]
-    conn = get_db()
-    conn.execute(
-        "UPDATE submissions SET status=?, reviewed_at=datetime('now', 'localtime') WHERE id=?",
-        (new_status, submission_id),
-    )
-    conn.commit()
-    conn.close()
-    flash(f"投稿状态已更新为 {new_status}", "success")
-    return redirect(url_for("submission_list"))
 
 
 if __name__ == "__main__":
