@@ -1,2 +1,1 @@
 mkdocs-material>=9.0
-flask>=3.0

@@ -1,6 +1,6 @@
-site_name: 英语学院课程信息
-site_description: 对外经济贸易大学英语学院课程信息平台 - 课程内容与考核方式查询
-site_author: SIS@UIBE
+site_name: 去码头学会英语
+site_description: 一本闲书，希望外经贸快点替代我
+site_author: Jackey
 repo_url: https://github.com/1ackey/courseplan
 repo_name: 1ackey/courseplan
 edit_uri: edit/main/docs/
@@ -113,7 +113,6 @@ nav:
     - categories/basic-elective/ENG766.md
     - categories/basic-elective/ENG772.md
     - categories/basic-elective/ENG773.md
-    - categories/basic-elective/ENG784.md
     - categories/basic-elective/ENG787.md
     - categories/basic-elective/ENG794.md
     - categories/basic-elective/ENG795.md
@@ -124,6 +123,7 @@ nav:
     - categories/basic-elective/ENG808.md
     - categories/basic-elective/ENG809.md
     - categories/basic-elective/ENG810.md
+    - categories/basic-elective/ENG811.md
     - categories/basic-elective/ENG812.md
     - categories/basic-elective/ENG813.md
     - categories/basic-elective/ENG814.md
@@ -138,23 +138,34 @@ nav:
     - categories/basic-elective/HUM428.md
   - 专业方向课:
     - categories/major-direction/index.md
+    - categories/major-direction/ENG158.md
     - categories/major-direction/ENG357.md
+    - categories/major-direction/ENG360.md
+    - categories/major-direction/ENG361.md
     - categories/major-direction/ENG366.md
     - categories/major-direction/ENG450.md
+    - categories/major-direction/ENG470.md
     - categories/major-direction/ENG519.md
+    - categories/major-direction/ENG628.md
     - categories/major-direction/ENG765.md
     - categories/major-direction/ENG797.md
     - categories/major-direction/ENG798.md
+    - categories/major-direction/ENG817.md
     - categories/major-direction/ENG818.md
+    - categories/major-direction/ENG819.md
     - categories/major-direction/ENG820.md
     - categories/major-direction/ENG821.md
     - categories/major-direction/ENG822.md
+    - categories/major-direction/ENG823.md
     - categories/major-direction/ENG824.md
+    - categories/major-direction/ENG827.md
+    - categories/major-direction/ENG828.md
     - categories/major-direction/ENG831.md
     - categories/major-direction/ENG833.md
     - categories/major-direction/ENG834.md
     - categories/major-direction/ENG836.md
     - categories/major-direction/ENG837.md
+    - categories/major-direction/ENG840.md
     - categories/major-direction/ENG845.md
   - 实验课:
     - categories/lab/index.md
@@ -167,6 +178,5 @@ nav:
     - categories/lab/ENG839.md
     - categories/lab/ENG846.md
     - categories/lab/ENG847.md
-  - 教师索引: teachers/index.md
   - 贡献指南: contributing.md
   - 关于本站: about.md
