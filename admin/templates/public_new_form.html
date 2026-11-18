@@ -1,0 +1,91 @@
+{% extends "public_base.html" %}
+{% block title %}新增开课记录 · {{ course.code }} {{ course.name }}{% endblock %}
+{% block content %}
+<h1>新增开课记录</h1>
+<p class="subtitle">{{ course.code }} · {{ course.name }}（{{ course.category }}）</p>
+
+{% if mode == 2 and not is_admin %}
+<div class="mode-note">📢 当前为审核模式：提交后由管理员审核，通过后才会显示在网站上</div>
+{% else %}
+<div class="mode-note">⚡ 当前为直接生效模式：提交后立即显示在网站上</div>
+{% endif %}
+
+<form method="post">
+    <div class="card">
+        <div class="grid3">
+            <div class="form-group">
+                <label>任课教师 *</label>
+                <input type="text" name="teacher_name" required placeholder="老师姓名">
+            </div>
+            <div class="form-group">
+                <label>学期 *</label>
+                <select name="semester_name">
+                    {% for s in semesters %}
+                    <option value="{{ s.name }}">{{ s.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>或填写新学期</label>
+                <input type="text" name="new_semester" placeholder="如 2026-2027-1">
+            </div>
+        </div>
+        <div class="grid3">
+            <div class="form-group">
+                <label>总课时</label>
+                <input type="number" name="total_hours" value="32">
+            </div>
+            <div class="form-group">
+                <label>周课时</label>
+                <input type="number" name="weekly_hours" value="2">
+            </div>
+            <div class="form-group">
+                <label>教学周数</label>
+                <input type="number" name="teaching_weeks" value="16">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>考核方式</label>
+            <textarea name="assessment_method" placeholder="例如：平时 40% + 期末论文 60%"></textarea>
+        </div>
+        <div class="form-group">
+            <label>信息来源</label>
+            <input type="text" name="info_source" placeholder="例如：老师 2025 秋季学期进度表">
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="form-group">
+            <label>教学进度（选填，逐周）</label>
+            <textarea name="plans" class="tall" placeholder="1|3.11|2|研讨|Introduction|教师主讲&#10;2|3.18|2|研讨|Defining Pragmatics|教师主讲"></textarea>
+            <p class="hint">每周一行，格式：<b>周次|日期|课时|教学方式|内容提要|备注</b>（用竖线 | 分隔），可以直接把老师进度表粘贴进来。</p>
+        </div>
+        <div class="form-group">
+            <label>教材及参考资料（选填）</label>
+            <textarea name="textbooks" placeholder="教材|课本名称&#10;参考书|某文献"></textarea>
+            <p class="hint">每行一条，格式：<code>教材|书名</code> 或 <code>参考书|书名</code>。</p>
+        </div>
+    </div>
+
+    {% if mode == 2 and not is_admin %}
+    <div class="card">
+        <div class="grid3">
+            <div class="form-group">
+                <label>你的昵称（选填）</label>
+                <input type="text" name="submitter_name">
+            </div>
+            <div class="form-group">
+                <label>联系方式（选填）</label>
+                <input type="text" name="submitter_contact" placeholder="微信 / QQ / 邮箱">
+            </div>
+            <div class="form-group">
+                <label>给管理员的话（选填）</label>
+                <input type="text" name="note">
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary">{% if mode == 2 and not is_admin %}提交审核{% else %}提交{% endif %}</button>
+</form>
+{% endblock %}

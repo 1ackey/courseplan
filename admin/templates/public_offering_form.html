@@ -1,0 +1,82 @@
+{% extends "public_base.html" %}
+{% block title %}编辑 · {{ snap.label }}{% endblock %}
+{% block content %}
+<h1>编辑开课记录</h1>
+<p class="subtitle">{{ snap.label }}</p>
+
+{% if mode == 2 and not is_admin %}
+<div class="mode-note">📢 当前为审核模式：你的修改会先提交给管理员审核，通过后才会显示在网站上</div>
+{% else %}
+<div class="mode-note">⚡ 当前为直接生效模式：保存后立即更新网站</div>
+{% endif %}
+
+<form method="post">
+    <div class="card">
+        <div class="grid3">
+            <div class="form-group">
+                <label>总课时</label>
+                <input type="number" name="total_hours" value="{{ snap.fields.total_hours if snap.fields.total_hours is not none }}">
+            </div>
+            <div class="form-group">
+                <label>周课时</label>
+                <input type="number" name="weekly_hours" value="{{ snap.fields.weekly_hours if snap.fields.weekly_hours is not none }}">
+            </div>
+            <div class="form-group">
+                <label>教学周数</label>
+                <input type="number" name="teaching_weeks" value="{{ snap.fields.teaching_weeks if snap.fields.teaching_weeks is not none }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>考核方式</label>
+            <textarea name="assessment_method">{{ snap.fields.assessment_method }}</textarea>
+            <p class="hint">例如：平时 40% + 期末闭卷 60%，或者考核形式和注意事项</p>
+        </div>
+        <div class="form-group">
+            <label>信息来源</label>
+            <input type="text" name="info_source" value="{{ snap.fields.info_source }}" placeholder="例如：2023 级培养方案 / 老师发的进度表">
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="form-group">
+            <label>教学进度（逐周）</label>
+            <textarea name="plans" class="tall">{{ plans_text }}</textarea>
+            <p class="hint">
+                每周一行的格式：<b>周次|日期|课时|教学方式|内容提要|备注</b>（用竖线 | 分隔）。<br>
+                示例：<code>1|3.11|2|研讨|Introduction|教师主讲</code><br>
+                直接在上面的内容里修改即可；整行删除代表删掉那一周；也可以直接把老师进度表里的行粘贴进来。
+            </p>
+        </div>
+        <div class="form-group">
+            <label>教材及参考资料（选填）</label>
+            <textarea name="textbooks">{{ textbooks_text }}</textarea>
+            <p class="hint">每行一条，格式：<code>教材|书名</code> 或 <code>参考书|书名/文献</code>，只写文字则默认为参考书。</p>
+        </div>
+    </div>
+
+    {% if mode == 2 and not is_admin %}
+    <div class="card">
+        <div class="grid3">
+            <div class="form-group">
+                <label>你的昵称（选填）</label>
+                <input type="text" name="submitter_name" placeholder="方便管理员联系你核实">
+            </div>
+            <div class="form-group">
+                <label>联系方式（选填）</label>
+                <input type="text" name="submitter_contact" placeholder="微信 / QQ / 邮箱">
+            </div>
+            <div class="form-group">
+                <label>给管理员的话（选填）</label>
+                <input type="text" name="note" placeholder="补充说明">
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary">{% if mode == 2 and not is_admin %}提交审核{% else %}保存修改{% endif %}</button>
+</form>
+
+<div class="card danger-box">
+    <p>发现这一页的信息完全不对、需要整体删除这门开课记录？请通过邮件联系管理员：<b>ja0key@qq.com</b>（删除是不可逆操作，暂不开放自助删除）。</p>
+</div>
+{% endblock %}

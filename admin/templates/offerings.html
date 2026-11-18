@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}开课记录{% endblock %}
+{% block content %}
+<div class="flex-between mb-16">
+    <h1>开课记录</h1>
+    <a href="{{ url_for('offering_new') }}" class="btn btn-primary">+ 新增开课记录</a>
+</div>
+
+<form class="filter-bar" method="get">
+    <div class="form-group" style="margin-bottom:0;">
+        <label>按课程筛选</label>
+        <select name="course_id" onchange="this.form.submit()">
+            <option value="">全部课程</option>
+            {% for c in courses %}
+            <option value="{{ c.id }}" {% if filter_course == c.id|string %}selected{% endif %}>{{ c.code }} {{ c.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group" style="margin-bottom:0;">
+        <label>按教师筛选</label>
+        <select name="teacher_id" onchange="this.form.submit()">
+            <option value="">全部教师</option>
+            {% for t in teachers %}
+            <option value="{{ t.id }}" {% if filter_teacher == t.id|string %}selected{% endif %}>{{ t.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group" style="margin-bottom:0;">
+        <label>按学期筛选</label>
+        <select name="semester_id" onchange="this.form.submit()">
+            <option value="">全部学期</option>
+            {% for s in semesters %}
+            <option value="{{ s.id }}" {% if filter_semester == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <a href="{{ url_for('offering_list') }}" class="btn btn-sm btn-outline" style="margin-bottom:0;">清除筛选</a>
+</form>
+
+{% if offerings %}
+<table>
+    <thead>
+        <tr>
+            <th>课程</th>
+            <th>教师</th>
+            <th>学期</th>
+            <th>课时</th>
+            <th>周数</th>
+            <th>更新日期</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for o in offerings %}
+        <tr>
+            <td><a href="{{ url_for('offering_detail', offering_id=o.id) }}"><code>{{ o.code }}</code> {{ o.course_name }}</a></td>
+            <td>{{ o.teacher_name }}</td>
+            <td>{{ o.semester_name }}</td>
+            <td>{{ o.total_hours }} / {{ o.weekly_hours }}/周</td>
+            <td>{{ o.teaching_weeks or '-' }}</td>
+            <td>{{ o.updated_at }}</td>
+            <td class="table-actions">
+                <a href="{{ url_for('offering_detail', offering_id=o.id) }}" class="btn btn-sm btn-outline">详情</a>
+                <a href="{{ url_for('offering_edit', offering_id=o.id) }}" class="btn btn-sm btn-outline">编辑</a>
+                <form method="post" action="{{ url_for('offering_delete', offering_id=o.id) }}" onsubmit="return confirm('确定删除？')">
+                    <button class="btn btn-sm btn-danger">删除</button>
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="empty-state">暂无开课记录，请先添加教师、学期和课程</div>
+{% endif %}
+{% endblock %}

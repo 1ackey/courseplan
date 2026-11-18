@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}审核详情{% endblock %}
+{% block content %}
+<h1>审核详情 · {{ payload.label or ('#' ~ sub.id) }}</h1>
+
+<div class="detail-section">
+    <div class="detail-grid">
+        <div class="label">类型</div><div>{% if sub.action == 'edit_offering' %}修改开课记录{% elif sub.action == 'create_offering' %}新增开课记录{% else %}删除开课记录{% endif %}</div>
+        <div class="label">提交人</div><div>{{ sub.submitter_name or '匿名' }}{% if sub.submitter_contact %} · {{ sub.submitter_contact }}{% endif %}</div>
+        <div class="label">IP</div><div>{{ sub.ip or '—' }}</div>
+        <div class="label">时间</div><div>{{ sub.created_at }}</div>
+        <div class="label">说明</div><div>{{ sub.note or '—' }}</div>
+        <div class="label">状态</div><div>{% if sub.status == 'pending' %}<span class="badge">待审核</span>{% elif sub.status == 'approved' %}<span class="badge" style="background:var(--success-light);color:var(--success);">已通过</span>{% else %}<span class="badge" style="background:var(--danger-light);color:var(--danger);">已驳回</span>{% endif %}</div>
+    </div>
+</div>
+
+{% if before %}
+<h2>字段对比</h2>
+<table>
+    <thead><tr><th>字段</th><th>当前</th><th>提交的修改</th></tr></thead>
+    <tbody>
+    {% for key, new_val in fields %}
+        {% set old_val = before_fields.get(key, '') %}
+        <tr>
+            <td>{{ {'total_hours':'总课时','weekly_hours':'周课时','teaching_weeks':'教学周数','assessment_method':'考核方式','info_source':'信息来源'}.get(key, key) }}</td>
+            <td style="{% if old_val != new_val %}color:var(--danger);{% endif %}">{{ old_val if old_val != '' else '—' }}</td>
+            <td style="{% if old_val != new_val %}color:var(--success);font-weight:600;{% endif %}">{{ new_val if new_val != '' and new_val != none else '—' }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<h2>教学进度对比</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div>
+        <h3 style="font-size:14px;margin-bottom:8px;">当前（{{ before.weekly_plans | length }} 周）</h3>
+        <table>
+            <thead><tr><th>周</th><th>日期</th><th>方式</th><th>内容</th><th>备注</th></tr></thead>
+            <tbody>
+            {% for p in before.weekly_plans %}
+                <tr><td>{{ p.week_number }}</td><td>{{ p.date }}</td><td>{{ p.teaching_method }}</td><td>{{ p.content }}</td><td>{{ p.notes }}</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <h3 style="font-size:14px;margin-bottom:8px;">提交的修改（{{ payload.weekly_plans | length }} 周）</h3>
+        <table>
+            <thead><tr><th>周</th><th>日期</th><th>方式</th><th>内容</th><th>备注</th></tr></thead>
+            <tbody>
+            {% for p in payload.weekly_plans %}
+                <tr><td>{{ p.week_number }}</td><td>{{ p.date }}</td><td>{{ p.teaching_method }}</td><td>{{ p.content }}</td><td>{{ p.notes }}</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<h2>教材对比</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div>
+        <h3 style="font-size:14px;margin-bottom:8px;">当前</h3>
+        {% if before.textbooks %}<ul style="font-size:13px;line-height:1.8;">{% for b in before.textbooks %}<li>[{{ b.type }}] {{ b.description }}</li>{% endfor %}</ul>
+        {% else %}<p style="color:var(--gray-500);font-size:13px;">（无）</p>{% endif %}
+    </div>
+    <div>
+        <h3 style="font-size:14px;margin-bottom:8px;">提交的修改</h3>
+        {% if payload.textbooks %}<ul style="font-size:13px;line-height:1.8;">{% for b in payload.textbooks %}<li>[{{ b.type }}] {{ b.description }}</li>{% endfor %}</ul>
+        {% else %}<p style="color:var(--gray-500);font-size:13px;">（无）</p>{% endif %}
+    </div>
+</div>
+{% else %}
+<h2>提交的内容（新增）</h2>
+<table>
+    <tbody>
+    {% for key, new_val in fields %}
+        <tr><td style="width:120px;">{{ {'total_hours':'总课时','weekly_hours':'周课时','teaching_weeks':'教学周数','assessment_method':'考核方式','info_source':'信息来源'}.get(key, key) }}</td><td>{{ new_val if new_val != '' and new_val != none else '—' }}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<h3 style="font-size:14px;">教学进度（{{ payload.weekly_plans | length }} 周）</h3>
+<table>
+    <thead><tr><th>周</th><th>日期</th><th>课时</th><th>方式</th><th>内容</th><th>备注</th></tr></thead>
+    <tbody>
+    {% for p in payload.weekly_plans %}
+        <tr><td>{{ p.week_number }}</td><td>{{ p.date }}</td><td>{{ p.hours }}</td><td>{{ p.teaching_method }}</td><td>{{ p.content }}</td><td>{{ p.notes }}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<h3 style="font-size:14px;">教材</h3>
+{% if payload.textbooks %}<ul style="font-size:13px;line-height:1.8;">{% for b in payload.textbooks %}<li>[{{ b.type }}] {{ b.description }}</li>{% endfor %}</ul>
+{% else %}<p style="color:var(--gray-500);font-size:13px;">（无）</p>{% endif %}
+{% endif %}
+
+{% if sub.status == 'pending' %}
+<div class="detail-section" style="max-width:600px;">
+    <form method="post" action="{{ url_for('submission_approve', sid=sub.id) }}" style="margin-bottom:12px;">
+        <div class="form-group">
+            <label>审核备注（可选）</label>
+            <input type="text" name="note" placeholder="例如：信息已核对">
+        </div>
+        <button type="submit" class="btn btn-primary">✓ 通过并应用</button>
+    </form>
+    <form method="post" action="{{ url_for('submission_reject', sid=sub.id) }}">
+        <div class="form-group">
+            <label>驳回理由（可选）</label>
+            <input type="text" name="note" placeholder="例如：信息不准确">
+        </div>
+        <button type="submit" class="btn btn-danger">✕ 驳回</button>
+    </form>
+</div>
+{% else %}
+<div class="detail-section">
+    <p style="font-size:13px;color:var(--gray-500);">审核备注：{{ sub.review_note or '—' }}（{{ sub.reviewed_at or '' }}）</p>
+</div>
+{% endif %}
+{% endblock %}

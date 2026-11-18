@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}审核队列{% endblock %}
+{% block content %}
+<h1>审核队列</h1>
+
+<div class="filter-bar">
+    <a href="{{ url_for('submission_list', status='pending') }}" class="btn {% if status == 'pending' %}btn-primary{% else %}btn-outline{% endif %}">待审核</a>
+    <a href="{{ url_for('submission_list', status='approved') }}" class="btn {% if status == 'approved' %}btn-primary{% else %}btn-outline{% endif %}">已通过</a>
+    <a href="{{ url_for('submission_list', status='rejected') }}" class="btn {% if status == 'rejected' %}btn-primary{% else %}btn-outline{% endif %}">已驳回</a>
+    <a href="{{ url_for('submission_list', status='all') }}" class="btn {% if status == 'all' %}btn-primary{% else %}btn-outline{% endif %}">全部</a>
+</div>
+
+{% if items %}
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>类型</th>
+            <th>内容</th>
+            <th>提交人</th>
+            <th>时间</th>
+            <th>状态</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        {% set s = item.row %}
+        <tr>
+            <td>{{ s.id }}</td>
+            <td>
+                {% if s.action == 'edit_offering' %}修改开课记录
+                {% elif s.action == 'create_offering' %}新增开课记录
+                {% else %}删除开课记录{% endif %}
+            </td>
+            <td>{{ item.label or ('#' ~ s.id) }}</td>
+            <td>{{ s.submitter_name or '匿名' }}{% if s.submitter_contact %}<br><small style="color:var(--gray-500);">{{ s.submitter_contact }}</small>{% endif %}</td>
+            <td>{{ s.created_at }}</td>
+            <td>
+                {% if s.status == 'pending' %}<span class="badge">待审核</span>
+                {% elif s.status == 'approved' %}<span class="badge" style="background:var(--success-light);color:var(--success);">已通过</span>
+                {% else %}<span class="badge" style="background:var(--danger-light);color:var(--danger);">已驳回</span>{% endif %}
+            </td>
+            <td class="table-actions">
+                <a href="{{ url_for('submission_detail', sid=s.id) }}" class="btn btn-outline btn-sm">查看</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="empty-state">暂无{{ {'pending':'待审核','approved':'已通过','rejected':'已驳回','all':''}[status] }}提交</div>
+{% endif %}
+{% endblock %}

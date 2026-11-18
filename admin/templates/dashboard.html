@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}仪表盘{% endblock %}
+{% block content %}
+<h1>仪表盘</h1>
+
+<div class="stats">
+    <div class="stat-card">
+        <div class="stat-value">{{ course_count }}</div>
+        <div class="stat-label">课程总数</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ teacher_count }}</div>
+        <div class="stat-label">教师</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ semester_count }}</div>
+        <div class="stat-label">学期</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ offering_count }}</div>
+        <div class="stat-label">开课记录</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ plan_count }}</div>
+        <div class="stat-label">教学周计划</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">模式 {{ current_mode_value }}</div>
+        <div class="stat-label">当前管理模式</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ pending_count }}</div>
+        <div class="stat-label">待审核提交</div>
+    </div>
+</div>
+
+<h2>快捷操作</h2>
+<div style="display:flex;gap:10px;margin-top:12px;">
+    <a href="{{ url_for('offering_new') }}" class="btn btn-primary">+ 新增开课记录</a>
+    <a href="{{ url_for('teacher_new') }}" class="btn btn-outline">+ 添加教师</a>
+    <a href="{{ url_for('export_page') }}" class="btn btn-outline">导出 / 发布</a>
+    <a href="{{ url_for('submission_list') }}" class="btn btn-outline">审核队列{% if pending_count %}（{{ pending_count }}）{% endif %}</a>
+</div>
+{% endblock %}

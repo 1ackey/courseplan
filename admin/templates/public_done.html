@@ -1,0 +1,16 @@
+{% extends "public_base.html" %}
+{% block title %}{{ '完成' if ok else '出错了' }}{% endblock %}
+{% block content %}
+<div class="card" style="text-align:center;padding:48px;">
+    {% if ok %}
+    <h1>🎉 {{ message }}</h1>
+    {% else %}
+    <h1>😕 {{ message }}</h1>
+    {% endif %}
+    <p style="color:var(--gray-500);font-size:13px;margin:16px 0 20px;">
+        {% if ok and '审核' in message %}审核结果通常在一两天内处理，处理结果不会单独通知，可以过几天回来看看。{% endif %}
+    </p>
+    <a href="/" class="btn btn-primary">返回网站</a>
+    <a href="javascript:history.back()" class="btn btn-outline" style="margin-left:8px;">继续编辑</a>
+</div>
+{% endblock %}

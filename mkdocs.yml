@@ -56,127 +56,126 @@ nav:
   - 首页: index.md
   - 基础必修:
     - categories/basic-required/index.md
-    - categories/basic-required/ENG183.md
-    - categories/basic-required/ENG184.md
-    - categories/basic-required/ENG185.md
-    - categories/basic-required/ENG186.md
-    - categories/basic-required/ENG493.md
-    - categories/basic-required/ENG775.md
-    - categories/basic-required/ENG776.md
-    - categories/basic-required/ENG777.md
-    - categories/basic-required/ENG778.md
-    - categories/basic-required/ENG779.md
-    - categories/basic-required/ENG780.md
-    - categories/basic-required/ENG781.md
-    - categories/basic-required/ENG783.md
-    - categories/basic-required/ENG786.md
-    - categories/basic-required/ENG790.md
-    - categories/basic-required/ESP320.md
-    - categories/basic-required/ESP321.md
-    - categories/basic-required/FRA343.md
-    - categories/basic-required/FRA344.md
-    - categories/basic-required/GER348.md
-    - categories/basic-required/GER349.md
-    - categories/basic-required/JAP325.md
-    - categories/basic-required/JAP326.md
+    - ENG183 综合商务英语（一）: categories/basic-required/ENG183.md
+    - ENG184 综合商务英语（二）: categories/basic-required/ENG184.md
+    - ENG185 综合商务英语（三）: categories/basic-required/ENG185.md
+    - ENG186 综合商务英语（四）: categories/basic-required/ENG186.md
+    - ENG493 英语论文写作: categories/basic-required/ENG493.md
+    - ENG775 商务英语听说（一）: categories/basic-required/ENG775.md
+    - ENG776 英语阅读指导与实践: categories/basic-required/ENG776.md
+    - ENG777 英语语法与写作: categories/basic-required/ENG777.md
+    - ENG778 商务英语听说（二）: categories/basic-required/ENG778.md
+    - ENG779 英语文学阅读（一）: categories/basic-required/ENG779.md
+    - ENG780 英语修辞与写作: categories/basic-required/ENG780.md
+    - ENG781 英语演讲与辩论: categories/basic-required/ENG781.md
+    - ENG783 英汉笔译基础: categories/basic-required/ENG783.md
+    - ENG786 普通语言学导论: categories/basic-required/ENG786.md
+    - ENG790 文学研究方法与论文写作: categories/basic-required/ENG790.md
+    - ESP320 第二外语（西）（一）: categories/basic-required/ESP320.md
+    - ESP321 第二外语（西）（二）: categories/basic-required/ESP321.md
+    - FRA343 第二外语（法）（一）: categories/basic-required/FRA343.md
+    - FRA344 第二外语（法）（二）: categories/basic-required/FRA344.md
+    - GER348 第二外语（德）（一）: categories/basic-required/GER348.md
+    - GER349 第二外语（德）（二）: categories/basic-required/GER349.md
+    - JAP325 第二外语（日）（一）: categories/basic-required/JAP325.md
+    - JAP326 第二外语（日）（二）: categories/basic-required/JAP326.md
   - 基础选修:
     - categories/basic-elective/index.md
-    - categories/basic-elective/CLL402.md
-    - categories/basic-elective/ENG187.md
-    - categories/basic-elective/ENG188.md
-    - categories/basic-elective/ENG194.md
-    - categories/basic-elective/ENG263.md
-    - categories/basic-elective/ENG299.md
-    - categories/basic-elective/ENG301.md
-    - categories/basic-elective/ENG323.md
-    - categories/basic-elective/ENG356.md
-    - categories/basic-elective/ENG359.md
-    - categories/basic-elective/ENG360.md
-    - categories/basic-elective/ENG361.md
-    - categories/basic-elective/ENG463.md
-    - categories/basic-elective/ENG465.md
-    - categories/basic-elective/ENG470.md
-    - categories/basic-elective/ENG487.md
-    - categories/basic-elective/ENG491.md
-    - categories/basic-elective/ENG526.md
-    - categories/basic-elective/ENG540.md
-    - categories/basic-elective/ENG599.md
-    - categories/basic-elective/ENG628.md
-    - categories/basic-elective/ENG631.md
-    - categories/basic-elective/ENG633.md
-    - categories/basic-elective/ENG645.md
-    - categories/basic-elective/ENG648.md
-    - categories/basic-elective/ENG733.md
-    - categories/basic-elective/ENG734.md
-    - categories/basic-elective/ENG742.md
-    - categories/basic-elective/ENG756.md
-    - categories/basic-elective/ENG766.md
-    - categories/basic-elective/ENG772.md
-    - categories/basic-elective/ENG773.md
-    - categories/basic-elective/ENG787.md
-    - categories/basic-elective/ENG794.md
-    - categories/basic-elective/ENG795.md
-    - categories/basic-elective/ENG796.md
-    - categories/basic-elective/ENG799.md
-    - categories/basic-elective/ENG800.md
-    - categories/basic-elective/ENG807.md
-    - categories/basic-elective/ENG808.md
-    - categories/basic-elective/ENG809.md
-    - categories/basic-elective/ENG810.md
-    - categories/basic-elective/ENG811.md
-    - categories/basic-elective/ENG812.md
-    - categories/basic-elective/ENG813.md
-    - categories/basic-elective/ENG814.md
-    - categories/basic-elective/ENG815.md
-    - categories/basic-elective/ENG816.md
-    - categories/basic-elective/ENG817.md
-    - categories/basic-elective/ENG819.md
-    - categories/basic-elective/ENG823.md
-    - categories/basic-elective/ENG827.md
-    - categories/basic-elective/ENG848.md
-    - categories/basic-elective/ENT307.md
-    - categories/basic-elective/HUM428.md
+    - CLL402 中外文学交流专题: categories/basic-elective/CLL402.md
+    - ENG187 商务英语写作（一）: categories/basic-elective/ENG187.md
+    - ENG188 商务英语写作（二）: categories/basic-elective/ENG188.md
+    - ENG194 莎士比亚入门（英）: categories/basic-elective/ENG194.md
+    - ENG263 国际商业文化（英）: categories/basic-elective/ENG263.md
+    - ENG299 国际金融导论（英）: categories/basic-elective/ENG299.md
+    - ENG301 高级商务英语听说: categories/basic-elective/ENG301.md
+    - ENG323 金融英语阅读: categories/basic-elective/ENG323.md
+    - ENG356 商业伦理学（英）: categories/basic-elective/ENG356.md
+    - ENG359 高级金融英语: categories/basic-elective/ENG359.md
+    - ENG360 商务翻译（英译汉）: categories/basic-elective/ENG360.md
+    - ENG361 商务翻译（汉译英）: categories/basic-elective/ENG361.md
+    - ENG463 国际商务礼仪（英）: categories/basic-elective/ENG463.md
+    - ENG465 实用法律文书翻译（英）: categories/basic-elective/ENG465.md
+    - ENG470 商法导论（英）: categories/basic-elective/ENG470.md
+    - ENG487 商科经典名著选读（英）: categories/basic-elective/ENG487.md
+    - ENG491 名著名译选读（英）: categories/basic-elective/ENG491.md
+    - ENG526 翻译概论（英）: categories/basic-elective/ENG526.md
+    - ENG540 文化人类学（英）: categories/basic-elective/ENG540.md
+    - ENG599 美国短篇小说选读（英）: categories/basic-elective/ENG599.md
+    - ENG628 国际贸易（英）: categories/basic-elective/ENG628.md
+    - ENG631 欧美戏剧（英）: categories/basic-elective/ENG631.md
+    - ENG633 散文分析: categories/basic-elective/ENG633.md
+    - ENG645 学术英语阅读与写作: categories/basic-elective/ENG645.md
+    - ENG648 英语词汇学导论: categories/basic-elective/ENG648.md
+    - ENG733 创新与创业管理（英）: categories/basic-elective/ENG733.md
+    - ENG734 创业计划书（英）: categories/basic-elective/ENG734.md
+    - ENG742 新闻传播伦理: categories/basic-elective/ENG742.md
+    - ENG756 基础英语测试: categories/basic-elective/ENG756.md
+    - ENG766 国际组织概况: categories/basic-elective/ENG766.md
+    - ENG772 当代财经新闻实务（英）: categories/basic-elective/ENG772.md
+    - ENG773 媒介经营与管理（英）: categories/basic-elective/ENG773.md
+    - ENG787 汉英笔译基础: categories/basic-elective/ENG787.md
+    - ENG794 商务英语阅读: categories/basic-elective/ENG794.md
+    - ENG795 英语听译: categories/basic-elective/ENG795.md
+    - ENG796 金融英语技能训练: categories/basic-elective/ENG796.md
+    - ENG799 英国社会与文化: categories/basic-elective/ENG799.md
+    - ENG800 美国历史: categories/basic-elective/ENG800.md
+    - ENG807 英语文学阅读（三）: categories/basic-elective/ENG807.md
+    - ENG808 美国社会与文化: categories/basic-elective/ENG808.md
+    - ENG809 19世纪晚期英国小说与社会: categories/basic-elective/ENG809.md
+    - ENG810 西方哲学史（英）: categories/basic-elective/ENG810.md
+    - ENG811 当代中国与媒体（英）: categories/basic-elective/ENG811.md
+    - ENG812 管理学（英）: categories/basic-elective/ENG812.md
+    - ENG813 营销学（英）: categories/basic-elective/ENG813.md
+    - ENG814 社会语言学: categories/basic-elective/ENG814.md
+    - ENG815 经济外交（英）: categories/basic-elective/ENG815.md
+    - ENG816 互联网与全球性议题: categories/basic-elective/ENG816.md
+    - ENG817 跨文化交际导论（英）: categories/basic-elective/ENG817.md
+    - ENG819 经济学原理（英）: categories/basic-elective/ENG819.md
+    - ENG823 对比语言学: categories/basic-elective/ENG823.md
+    - ENG827 文学翻译（英）: categories/basic-elective/ENG827.md
+    - ENG848 组织行为学（英）: categories/basic-elective/ENG848.md
+    - ENT307 翻译创业管理: categories/basic-elective/ENT307.md
+    - HUM428 西方文论: categories/basic-elective/HUM428.md
   - 专业方向课:
     - categories/major-direction/index.md
-    - categories/major-direction/ENG158.md
-    - categories/major-direction/ENG357.md
-    - categories/major-direction/ENG360.md
-    - categories/major-direction/ENG361.md
-    - categories/major-direction/ENG366.md
-    - categories/major-direction/ENG450.md
-    - categories/major-direction/ENG470.md
-    - categories/major-direction/ENG519.md
-    - categories/major-direction/ENG628.md
-    - categories/major-direction/ENG765.md
-    - categories/major-direction/ENG797.md
-    - categories/major-direction/ENG798.md
-    - categories/major-direction/ENG817.md
-    - categories/major-direction/ENG818.md
-    - categories/major-direction/ENG819.md
-    - categories/major-direction/ENG820.md
-    - categories/major-direction/ENG821.md
-    - categories/major-direction/ENG822.md
-    - categories/major-direction/ENG823.md
-    - categories/major-direction/ENG824.md
-    - categories/major-direction/ENG827.md
-    - categories/major-direction/ENG828.md
-    - categories/major-direction/ENG831.md
-    - categories/major-direction/ENG833.md
-    - categories/major-direction/ENG834.md
-    - categories/major-direction/ENG836.md
-    - categories/major-direction/ENG837.md
-    - categories/major-direction/ENG840.md
-    - categories/major-direction/ENG845.md
+    - ENG158 商学导论（英）:
+      - 课程总览: categories/major-direction/ENG158/index.md
+      - 2025-2026-2 · 徐凡: categories/major-direction/ENG158/o2-2025-2026-2-xufan.md
+    - ENG357 英美文学导论（英）: categories/major-direction/ENG357.md
+    - ENG366 英语文体学: categories/major-direction/ENG366.md
+    - ENG450 新闻编辑（英）: categories/major-direction/ENG450.md
+    - ENG519 传播学导论（英）: categories/major-direction/ENG519.md
+    - ENG765 西方文明史（英）: categories/major-direction/ENG765.md
+    - ENG797 句法学:
+      - 课程总览: categories/major-direction/ENG797/index.md
+      - 2025-2026-1 · 张东冰: categories/major-direction/ENG797/o3-2025-2026-1-zhangdongbing.md
+    - ENG798 语义学: categories/major-direction/ENG798.md
+    - ENG818 新媒体理论与实践: categories/major-direction/ENG818.md
+    - ENG820 语用学:
+      - 课程总览: categories/major-direction/ENG820/index.md
+      - 2025-2026-2 · 向明友: categories/major-direction/ENG820/o1-2025-2026-2-xiangmingyou.md
+    - ENG821 话语修辞与谈判: categories/major-direction/ENG821.md
+    - ENG822 话语分析: categories/major-direction/ENG822.md
+    - ENG824 国际政治（英）: categories/major-direction/ENG824.md
+    - ENG828 交替口译（一）（英）: categories/major-direction/ENG828.md
+    - ENG831 英国文学: categories/major-direction/ENG831.md
+    - ENG833 美国文学: categories/major-direction/ENG833.md
+    - ENG834 文学批评导论: categories/major-direction/ENG834.md
+    - ENG836 英语诗歌: categories/major-direction/ENG836.md
+    - ENG837 英语语言史: categories/major-direction/ENG837.md
+    - ENG840 交替口译（二）（英）: categories/major-direction/ENG840.md
+    - ENG845 英语新闻采访与写作: categories/major-direction/ENG845.md
   - 实验课:
     - categories/lab/index.md
-    - categories/lab/ENG495.md
-    - categories/lab/ENG531.md
-    - categories/lab/ENG549.md
-    - categories/lab/ENG598.md
-    - categories/lab/ENG740.md
-    - categories/lab/ENG838.md
-    - categories/lab/ENG839.md
-    - categories/lab/ENG846.md
-    - categories/lab/ENG847.md
+    - ENG495 进出口实务（英）: categories/lab/ENG495.md
+    - ENG531 机辅翻译（英）: categories/lab/ENG531.md
+    - ENG549 英语语音与会话: categories/lab/ENG549.md
+    - ENG598 口译实践: categories/lab/ENG598.md
+    - ENG740 商务英语谈判: categories/lab/ENG740.md
+    - ENG838 语料库语言学: categories/lab/ENG838.md
+    - ENG839 财经新闻写作实践（英）: categories/lab/ENG839.md
+    - ENG846 英语戏剧欣赏与实践: categories/lab/ENG846.md
+    - ENG847 英语歌曲与跨文化沟通: categories/lab/ENG847.md
+  - 教师索引: teachers/index.md
   - 贡献指南: contributing.md
   - 关于本站: about.md

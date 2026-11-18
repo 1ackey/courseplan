@@ -1,0 +1,14 @@
+{% extends "public_base.html" %}
+{% block title %}暂时不可编辑{% endblock %}
+{% block content %}
+<div class="card" style="text-align:center;padding:48px;">
+    <h1>🔒 暂时不可编辑</h1>
+    <p style="color:var(--gray-700);margin:16px 0;font-size:14px;">
+        {{ reason or "网站当前处于只读模式，除管理员外暂不能提交修改。" }}
+    </p>
+    <p style="color:var(--gray-500);font-size:13px;margin-bottom:20px;">
+        如果你有信息想贡献，可以发送邮件到 <b>ja0key@qq.com</b>
+    </p>
+    <a href="/" class="btn btn-outline">返回网站</a>
+</div>
+{% endblock %}
