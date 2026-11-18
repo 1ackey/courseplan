@@ -8,3 +8,5 @@ db/courseplan.db
 *.doc
 *.docx
 .sync.lock
+
+db/*.bak*

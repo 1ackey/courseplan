@@ -42,9 +42,15 @@ def parse_offering_page(text):
 
     hours = fields.get("总课时 / 周课时", "") or fields.get("总课时/周课时", "") or ""
     total_hours = weekly_hours = teaching_weeks = None
-    hm = re.match(r"^(\d+)\s*/\s*(\d+)$", hours.replace("／", "/"))
+    hours = hours.replace("／", "/").replace("待补充", "").strip()
+    hm = re.match(r"^(\d+)\s*/\s*(\d+)?\s*$", hours)
     if hm:
-        total_hours, weekly_hours = int(hm.group(1)), int(hm.group(2))
+        total_hours = int(hm.group(1))
+        weekly_hours = int(hm.group(2)) if hm.group(2) else None
+    else:
+        hm = re.match(r"^/\s*(\d+)\s*$", hours)
+        if hm:
+            weekly_hours = int(hm.group(1))
     wm = fields.get("教学周数", "")
     if wm and wm != "待补充":
         try:
@@ -146,15 +152,30 @@ def upsert_offering(conn, data, dir_name, offering_id_hint=None):
              data["assessment_method"], data["info_source"], data["updated_at"], oid),
         )
     else:
-        cur = conn.execute(
-            """INSERT INTO course_offerings
-               (course_id, teacher_id, semester_id, total_hours, weekly_hours,
-                teaching_weeks, assessment_method, info_source, updated_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-            (course_id, teacher_id, semester_id, data["total_hours"],
-             data["weekly_hours"], data["teaching_weeks"], data["assessment_method"],
-             data["info_source"], data["updated_at"]),
-        )
+        # Prefer the id embedded in the filename so that a DB rebuilt from
+        # markdown reproduces the exact same offering ids (no churn).
+        id_free = bool(offering_id_hint) and not conn.execute(
+            "SELECT 1 FROM course_offerings WHERE id=?", (offering_id_hint,)
+        ).fetchone()
+        values = (course_id, teacher_id, semester_id, data["total_hours"],
+                  data["weekly_hours"], data["teaching_weeks"],
+                  data["assessment_method"], data["info_source"], data["updated_at"])
+        if id_free:
+            cur = conn.execute(
+                """INSERT INTO course_offerings
+                   (id, course_id, teacher_id, semester_id, total_hours, weekly_hours,
+                    teaching_weeks, assessment_method, info_source, updated_at)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                (offering_id_hint,) + values,
+            )
+        else:
+            cur = conn.execute(
+                """INSERT INTO course_offerings
+                   (course_id, teacher_id, semester_id, total_hours, weekly_hours,
+                    teaching_weeks, assessment_method, info_source, updated_at)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                values,
+            )
         oid = cur.lastrowid
 
     replace_children(conn, oid, data)

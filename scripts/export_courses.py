@@ -50,7 +50,10 @@ def get_db():
 
 
 def offering_filename(offering):
-    return f"o{offering['id']}-{offering['semester_name']}-{teacher_slug(offering['teacher_name'])}.md"
+    sem = offering["semester_name"] or ""
+    if not re.match(r"^\d{4}-\d{4}-\d$", sem):
+        sem = teacher_slug(sem)
+    return f"o{offering['id']}-{sem}-{teacher_slug(offering['teacher_name'])}.md"
 
 
 # ─── Course overview page ─────────────────────────────────────────────
@@ -87,7 +90,7 @@ def build_course_index(course, offerings):
             "|------|----------|----------------|------|",
         ])
         for o in offerings:
-            link = f"[查看](o{o['id']}-{o['semester_name']}-{teacher_slug(o['teacher_name'])}.md)"
+            link = f"[查看]({offering_filename(o)})"
             hours = f"{o['total_hours'] or '—'} / {o['weekly_hours'] or '—'}"
             lines.append(f"| {o['semester_name']} | {o['teacher_name']} | {hours} | {link} |")
         lines.append("")

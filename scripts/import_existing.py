@@ -142,7 +142,13 @@ def parse_textbook_list(section_text):
 
 
 def split_sections(md_text):
-    """Split markdown body into {heading: text}."""
+    """Split markdown body into {heading: text}.
+
+    Generated pages end with a footer (``---`` + ``*最后更新：…*``); strip it
+    first so it does not leak into the last section (e.g. 考核方式).
+    """
+    md_text = re.sub(r"\n-{3,}\s*\n+\*最后更新：[^\n]*\*\s*$", "\n",
+                     md_text.rstrip())
     sections = {}
     current = None
     buf = []
@@ -197,7 +203,12 @@ def get_or_create_semester(conn, name):
         return row["id"]
     m = re.match(r"^(\d{4})-(\d{4})-(\d)$", name)
     if not m:
-        return None
+        # placeholder semester such as 待考据 (schema requires term 1 or 2)
+        cur = conn.execute(
+            "INSERT INTO semesters (name, academic_year, term) VALUES (?, ?, ?)",
+            (name, name, 1),
+        )
+        return cur.lastrowid
     cur = conn.execute(
         "INSERT INTO semesters (name, academic_year, term) VALUES (?, ?, ?)",
         (name, m.group(1) + "-" + m.group(2), int(m.group(3))),
