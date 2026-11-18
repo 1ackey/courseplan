@@ -31,6 +31,12 @@ title: 英语文体学 · 李若珊 · 待考据
 
 - [参考书] 文体学  BY 文旭，宋成方
 
+## 留言 · 学习心得
+
+欢迎留下你对这门课的真实感受、经验或建议。发布后可以随时修改或删除自己的留言。
+
+<div class="course-comments" data-offering="9" data-api="/notebook-admin/api/comments"><p>留言加载中…</p></div>
+
 ---
 
 *最后更新：2026-07-20 · 信息来源：2023 级培养方案*

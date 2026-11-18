@@ -97,3 +97,115 @@
   color: var(--md-default-fg-color--light);
   margin-left: 8px;
 }
+
+/* 课程留言 */
+.course-comments {
+  margin-top: 8px;
+}
+
+.comments-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 12px 0 20px;
+}
+
+.comments-form input,
+.comments-form textarea {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--md-default-fg-color);
+  background: var(--md-default-bg-color);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 4px;
+}
+
+.comments-form input:focus,
+.comments-form textarea:focus {
+  outline: none;
+  border-color: var(--md-primary-fg-color);
+}
+
+.comments-form textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.comments-submit {
+  align-self: flex-start;
+  padding: 6px 18px;
+  font-size: 14px;
+  color: var(--md-primary-bg-color);
+  background: var(--md-primary-fg-color);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.comments-submit:hover {
+  opacity: 0.9;
+}
+
+.comments-status {
+  font-size: 13px;
+  color: var(--md-default-fg-color--light);
+}
+
+.comment {
+  padding: 12px 0;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.comment-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.comment-author {
+  font-size: 14px;
+}
+
+.comment-date {
+  font-size: 12px;
+  color: var(--md-default-fg-color--light);
+}
+
+.comment-body {
+  font-size: 14px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.comment-actions {
+  margin-top: 6px;
+  display: flex;
+  gap: 12px;
+}
+
+.comment-link {
+  padding: 0;
+  font-size: 12px;
+  color: var(--md-primary-fg-color);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.comment-edit-box {
+  width: 100%;
+  min-height: 80px;
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: 14px;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 4px;
+}
+
+.comments-empty {
+  font-size: 13px;
+  color: var(--md-default-fg-color--light);
+}

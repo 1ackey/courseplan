@@ -38,6 +38,9 @@ theme:
 extra_css:
   - stylesheets/extra.css
 
+extra_javascript:
+  - javascripts/comments.js
+
 plugins:
   - search:
       lang: zh

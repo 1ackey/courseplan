@@ -22,7 +22,7 @@ from functools import wraps
 
 from flask import (
     Flask, render_template, request, redirect, url_for, flash, Response,
-    session,
+    jsonify, session,
 )
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -33,6 +33,8 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "courseplan-admin-secret-key")
 
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin123")
+# Where the public site lives (used by "返回网站" links after editing).
+SITE_PUBLIC_URL = os.environ.get("COURSEPLAN_SITE_URL", "/slides/notebook/")
 MAX_PLANS_PER_SUBMISSION = 200
 RATE_LIMIT_WINDOW_MINUTES = 10
 RATE_LIMIT_MAX_SUBMISSIONS = 3
@@ -86,11 +88,30 @@ def admin_required(fn):
 
 @app.before_request
 def auth_guard():
-    public_prefixes = ("/login", "/logout", "/static", "/public", "/webhook")
+    public_prefixes = ("/login", "/logout", "/static", "/public", "/webhook",
+                       "/api/comments")
     if request.path.startswith(public_prefixes):
         return None
     if not is_admin():
         return redirect(url_for("login", next=request.path))
+    return None
+
+
+_SCHEMA_READY = False
+
+
+@app.before_request
+def ensure_schema():
+    """Create newly added tables (e.g. comments) on an existing database."""
+    global _SCHEMA_READY
+    if not _SCHEMA_READY:
+        from db.init_db import init_schema
+        conn = get_db()
+        try:
+            init_schema(conn)
+        finally:
+            conn.close()
+        _SCHEMA_READY = True
     return None
 
 
@@ -107,6 +128,7 @@ def inject_globals():
         "is_admin": is_admin(),
         "current_mode_value": current_mode(),
         "pending_count": pending,
+        "site_url": SITE_PUBLIC_URL,
     }
 
 
@@ -1534,6 +1556,138 @@ def weekly_plan_bulk(offering_id):
     conn.close()
     flash(f"批量导入完成：{imported} 周", "success")
     return redirect(url_for("offering_detail", offering_id=offering_id))
+
+
+# ─── Course comments (public, no review) ─────────────────────────────
+
+COMMENT_MAX_BODY = 1500
+COMMENT_MAX_AUTHOR = 40
+COMMENT_RATE_MAX = 12  # posts per IP per rate-limit window
+
+
+def _json_error(message, code=400):
+    return jsonify({"ok": False, "error": message}), code
+
+
+def _client_ip():
+    forwarded = request.headers.get("X-Forwarded-For", "")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.headers.get("X-Real-IP") or request.remote_addr or ""
+
+
+def _can_edit_comment(row, key):
+    if is_admin():
+        return True
+    stored = row["edit_key"] or ""
+    return bool(key) and bool(stored) and hmac.compare_digest(stored, key)
+
+
+@app.route("/api/comments/<int:offering_id>", methods=["GET", "POST"])
+def api_comments(offering_id):
+    conn = get_db()
+    try:
+        offering = conn.execute(
+            "SELECT id FROM course_offerings WHERE id=?", (offering_id,)
+        ).fetchone()
+        if not offering:
+            return _json_error("课程记录不存在", 404)
+
+        if request.method == "GET":
+            key = (request.args.get("key") or "")[:64]
+            rows = conn.execute(
+                """SELECT id, author, body, created_at, updated_at, edit_key
+                   FROM comments WHERE offering_id=? AND hidden=0
+                   ORDER BY id DESC""",
+                (offering_id,),
+            ).fetchall()
+            return jsonify({
+                "ok": True,
+                "comments": [{
+                    "id": r["id"],
+                    "author": r["author"],
+                    "body": r["body"],
+                    "created_at": r["created_at"],
+                    "updated_at": r["updated_at"],
+                    "can_edit": _can_edit_comment(r, key),
+                } for r in rows],
+            })
+
+        data = request.get_json(silent=True) or {}
+        body = (data.get("body") or "").strip()
+        author = (data.get("author") or "").strip()[:COMMENT_MAX_AUTHOR] or "匿名同学"
+        key = (data.get("key") or "").strip()[:64]
+        if not body:
+            return _json_error("留言内容不能为空")
+        if len(body) > COMMENT_MAX_BODY:
+            return _json_error(f"留言太长了（最多 {COMMENT_MAX_BODY} 字）")
+
+        ip = _client_ip()
+        if not is_admin():
+            recent = conn.execute(
+                """SELECT COUNT(*) FROM comments
+                   WHERE ip=? AND created_at >= datetime('now', 'localtime', ?)""",
+                (ip, f"-{RATE_LIMIT_WINDOW_MINUTES} minutes"),
+            ).fetchone()[0]
+            if recent >= COMMENT_RATE_MAX:
+                return _json_error("发得太快了，休息几分钟再试～", 429)
+
+        cur = conn.execute(
+            """INSERT INTO comments (offering_id, author, body, edit_key, ip)
+               VALUES (?, ?, ?, ?, ?)""",
+            (offering_id, author, body, key, ip),
+        )
+        conn.commit()
+        return jsonify({"ok": True, "id": cur.lastrowid}), 201
+    finally:
+        conn.close()
+
+
+@app.route("/api/comments/<int:comment_id>/edit", methods=["POST"])
+def api_comment_edit(comment_id):
+    conn = get_db()
+    try:
+        row = conn.execute("SELECT * FROM comments WHERE id=?", (comment_id,)).fetchone()
+        if not row:
+            return _json_error("留言不存在", 404)
+        data = request.get_json(silent=True) or {}
+        key = (data.get("key") or "").strip()[:64]
+        if not _can_edit_comment(row, key):
+            return _json_error("没有权限修改这条留言", 403)
+        body = (data.get("body") or "").strip()
+        author = (data.get("author") or "").strip()[:COMMENT_MAX_AUTHOR] or row["author"]
+        if not body:
+            return _json_error("留言内容不能为空")
+        if len(body) > COMMENT_MAX_BODY:
+            return _json_error(f"留言太长了（最多 {COMMENT_MAX_BODY} 字）")
+        conn.execute(
+            """UPDATE comments
+               SET body=?, author=?, updated_at=datetime('now', 'localtime')
+               WHERE id=?""",
+            (body, author, comment_id),
+        )
+        conn.commit()
+        return jsonify({"ok": True})
+    finally:
+        conn.close()
+
+
+@app.route("/api/comments/<int:comment_id>/delete", methods=["POST"])
+def api_comment_delete(comment_id):
+    conn = get_db()
+    try:
+        row = conn.execute("SELECT * FROM comments WHERE id=?", (comment_id,)).fetchone()
+        if not row:
+            return _json_error("留言不存在", 404)
+        data = request.get_json(silent=True) or {}
+        key = (data.get("key") or "").strip()[:64]
+        if not _can_edit_comment(row, key):
+            return _json_error("没有权限删除这条留言", 403)
+        conn.execute("DELETE FROM comments WHERE id=?", (comment_id,))
+        conn.commit()
+        return jsonify({"ok": True})
+    finally:
+        conn.close()
 
 
 class PrefixMiddleware:

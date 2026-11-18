@@ -181,6 +181,17 @@ def build_offering_markdown(course, offering, conn):
             )
         lines.append("")
 
+    # Comments (rendered client-side, stored in the admin DB)
+    lines.extend([
+        "## 留言 · 学习心得",
+        "",
+        "欢迎留下你对这门课的真实感受、经验或建议。发布后可以随时修改或删除自己的留言。",
+        "",
+        f'<div class="course-comments" data-offering="{offering["id"]}"'
+        f' data-api="{EDIT_BASE}/api/comments"><p>留言加载中…</p></div>',
+        "",
+    ])
+
     lines.extend([
         "---",
         "",

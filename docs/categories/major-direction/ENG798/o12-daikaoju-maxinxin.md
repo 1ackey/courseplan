@@ -31,6 +31,12 @@ title: 语义学 · 马欣欣 · 待考据
 - [参考书] Heim & Krazer. 1998. Semantics in Generative Grammar.
 - [参考书] Coppock & Champollion. MS. Invitation to Formal Semantics. Chierchia & McConnell-Ginet. 2000. Meaning and Grammar, Second Edition: An Introduction to Semantics.
 
+## 留言 · 学习心得
+
+欢迎留下你对这门课的真实感受、经验或建议。发布后可以随时修改或删除自己的留言。
+
+<div class="course-comments" data-offering="12" data-api="/notebook-admin/api/comments"><p>留言加载中…</p></div>
+
 ---
 
 *最后更新：2026-11-18 · 信息来源：2023 级培养方案*

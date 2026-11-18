@@ -26,7 +26,7 @@
             <li><a href="{{ url_for('csv_page') }}" class="{% if request.path == '/csv' %}active{% endif %}">CSV 导入导出</a></li>
         </ul>
         <div class="sidebar-footer">
-            <a href="/" target="_blank">查看网站 &rarr;</a>
+            <a href="{{ site_url }}" target="_blank">查看网站 &rarr;</a>
             <a href="{{ url_for('logout') }}" style="margin-top:8px;">退出登录</a>
         </div>
     </nav>

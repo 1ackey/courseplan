@@ -24,6 +24,12 @@ title: 英语语言史 · 石小军 · 待考据
 
 期中开卷考试，期末论文
 
+## 留言 · 学习心得
+
+欢迎留下你对这门课的真实感受、经验或建议。发布后可以随时修改或删除自己的留言。
+
+<div class="course-comments" data-offering="18" data-api="/notebook-admin/api/comments"><p>留言加载中…</p></div>
+
 ---
 
 *最后更新：2026-06-17 · 信息来源：2023 级培养方案*
