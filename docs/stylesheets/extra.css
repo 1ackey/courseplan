@@ -98,114 +98,210 @@
   margin-left: 8px;
 }
 
-/* 课程留言 */
+/* ── 课程留言 ─────────────────────────────────────────────── */
 .course-comments {
-  margin-top: 8px;
+  max-width: 42rem;
+  margin: 0.6rem 0 0;
 }
 
 .comments-form {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin: 12px 0 20px;
+  gap: 0.6rem;
+  margin: 0.4rem 0 1.4rem;
 }
 
-.comments-form input,
 .comments-form textarea {
+  box-sizing: border-box;
   width: 100%;
-  padding: 8px 10px;
-  font-size: 15px;
+  min-height: 6.5rem;
+  padding: 0.7rem 0.85rem;
   font-family: inherit;
+  font-size: 16px; /* 16px 可避免 iOS 聚焦时页面被放大 */
+  line-height: 1.65;
   color: var(--md-default-fg-color);
-  background: var(--md-default-bg-color);
+  background-color: var(--md-default-bg-color);
   border: 1px solid var(--md-default-fg-color--lightest);
-  border-radius: 4px;
+  border-radius: 10px;
+  resize: vertical;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.comments-form input:focus,
+.comments-form textarea::placeholder {
+  color: var(--md-default-fg-color--lighter);
+}
+
 .comments-form textarea:focus {
   outline: none;
   border-color: var(--md-primary-fg-color);
+  box-shadow: 0 0 0 3px var(--md-default-fg-color--lightest);
 }
 
-.comments-form textarea {
-  min-height: 90px;
-  resize: vertical;
-}
-
-.comments-submit {
-  align-self: flex-start;
-  padding: 6px 18px;
-  font-size: 14px;
-  color: var(--md-primary-bg-color);
-  background: var(--md-primary-fg-color);
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.comments-submit:hover {
-  opacity: 0.9;
+.comments-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
 }
 
 .comments-status {
-  font-size: 13px;
+  font-size: 0.65rem;
+  line-height: 1.4;
   color: var(--md-default-fg-color--light);
 }
 
+.comments-status:empty {
+  display: none;
+}
+
+.comments-submit {
+  flex: none;
+  min-width: 6rem;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--md-primary-bg-color);
+  background-color: var(--md-primary-fg-color);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.comments-submit:hover {
+  opacity: 0.88;
+}
+
+.comments-submit:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.comments-list {
+  margin-top: 0.2rem;
+}
+
 .comment {
-  padding: 12px 0;
+  padding: 0.85rem 0;
   border-top: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.comment:first-child {
+  padding-top: 0.15rem;
+  border-top: none;
 }
 
 .comment-head {
   display: flex;
   align-items: baseline;
-  gap: 10px;
-  margin-bottom: 6px;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.15rem;
 }
 
 .comment-author {
-  font-size: 14px;
+  font-size: 0.75rem;
+  font-weight: 700;
 }
 
 .comment-date {
-  font-size: 12px;
+  font-size: 0.6rem;
   color: var(--md-default-fg-color--light);
 }
 
 .comment-body {
-  font-size: 14px;
+  font-size: 0.8rem;
+  line-height: 1.75;
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
   word-break: break-word;
 }
 
 .comment-actions {
-  margin-top: 6px;
   display: flex;
-  gap: 12px;
+  gap: 0.9rem;
+  margin-top: 0.35rem;
 }
 
 .comment-link {
   padding: 0;
-  font-size: 12px;
-  color: var(--md-primary-fg-color);
+  font-size: 0.65rem;
+  color: var(--md-default-fg-color--light);
   background: none;
   border: none;
   cursor: pointer;
 }
 
-.comment-edit-box {
-  width: 100%;
-  min-height: 80px;
-  padding: 8px 10px;
-  font-family: inherit;
-  font-size: 14px;
-  border: 1px solid var(--md-default-fg-color--lightest);
-  border-radius: 4px;
+.comment-link:hover {
+  color: var(--md-primary-fg-color);
+  text-decoration: underline;
 }
 
-.comments-empty {
-  font-size: 13px;
+.comment-edit-box {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 5rem;
+  margin-top: 0.3rem;
+  padding: 0.6rem 0.75rem;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--md-default-fg-color);
+  background-color: var(--md-default-bg-color);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 10px;
+  resize: vertical;
+}
+
+.comments-empty,
+.comments-loading {
+  font-size: 0.7rem;
   color: var(--md-default-fg-color--light);
+}
+
+/* 页面底部「编辑本页信息」入口 */
+.md-typeset .edit-page-link {
+  display: inline-block;
+  padding: 0.2rem 0.85rem;
+  font-size: 0.68rem;
+  color: var(--md-default-fg-color--light);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 999px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.md-typeset .edit-page-link:hover {
+  color: var(--md-primary-fg-color);
+  border-color: var(--md-primary-fg-color);
+}
+
+/* 手机端：输入框收紧、按钮整行，避免横向溢出 */
+@media screen and (max-width: 768px) {
+  .course-comments {
+    max-width: none;
+  }
+
+  .comments-form {
+    margin-bottom: 1.1rem;
+  }
+
+  .comments-form textarea {
+    min-height: 5.5rem;
+    padding: 0.65rem 0.75rem;
+  }
+
+  .comments-bar {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .comments-submit {
+    width: 100%;
+    padding: 0.65rem 1rem;
+  }
+
+  .comments-status {
+    text-align: center;
+  }
 }

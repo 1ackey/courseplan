@@ -6,8 +6,6 @@ title: 国际政治（英） · 教师待补充 · 待考据
 
 **待考据 · 教师待补充**
 
-[✏️ 编辑本页信息](/notebook-admin/public/offering/16)
-
 | 字段 | 内容 |
 |------|------|
 | 课程代码 | ENG824 |
@@ -18,8 +16,6 @@ title: 国际政治（英） · 教师待补充 · 待考据
 | 总课时 / 周课时 | 待补充 / 待补充 |
 | 教学周数 | 待补充 |
 
-[← 返回课程总览](index.md)
-
 ## 考核方式
 
 点过几次名，有一次闭卷小测
@@ -28,12 +24,12 @@ title: 国际政治（英） · 教师待补充 · 待考据
 
 期末为个人论文。
 
-## 留言 · 学习心得
+## 留言
 
-欢迎留下你对这门课的真实感受、经验或建议。发布后可以随时修改或删除自己的留言。
-
-<div class="course-comments" data-offering="16" data-api="/notebook-admin/api/comments"><p>留言加载中…</p></div>
+<div class="course-comments" data-offering="16" data-api="/notebook-admin/api/comments"></div>
 
 ---
 
 *最后更新：2026-06-17 · 信息来源：2023 级培养方案*
+
+[✏️ 编辑本页信息](/notebook-admin/public/offering/16){: .edit-page-link }

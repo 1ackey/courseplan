@@ -2,7 +2,6 @@
   "use strict";
 
   var KEY_STORE = "courseplan-comment-key";
-  var NAME_STORE = "courseplan-comment-name";
 
   function clientKey() {
     var key = localStorage.getItem(KEY_STORE);
@@ -50,30 +49,36 @@
     var apiBase = root.dataset.api || "/notebook-admin/api/comments";
     var offering = root.dataset.offering;
     var listUrl = apiBase + "/" + offering + "?key=" + encodeURIComponent(clientKey());
-    var status = h("span", "comments-status");
 
     root.textContent = "";
 
+    /* ── 输入区：一个文本框 + 一个按钮 ── */
     var form = h("form", "comments-form");
-    var nameInput = document.createElement("input");
-    nameInput.type = "text";
-    nameInput.placeholder = "昵称（可不填）";
-    nameInput.maxLength = 40;
-    nameInput.value = localStorage.getItem(NAME_STORE) || "";
+
     var bodyInput = document.createElement("textarea");
-    bodyInput.placeholder = "写点什么给这门课…（学习体验、考核特点、给学弟学妹的建议都可以）";
-    bodyInput.required = true;
+    bodyInput.rows = 3;
     bodyInput.maxLength = 1500;
-    var submit = h("button", "comments-submit", "发布留言");
+    bodyInput.required = true;
+    bodyInput.placeholder = "说说这门课的体验、考核方式，或者给学弟学妹的建议…";
+
+    var bar = h("div", "comments-bar");
+    var status = h("span", "comments-status");
+    var submit = h("button", "comments-submit", "发表留言");
     submit.type = "submit";
-    form.appendChild(nameInput);
+
+    bar.appendChild(status);
+    bar.appendChild(submit);
     form.appendChild(bodyInput);
-    form.appendChild(submit);
-    form.appendChild(status);
+    form.appendChild(bar);
 
     var list = h("div", "comments-list");
+
     root.appendChild(form);
     root.appendChild(list);
+
+    function setStatus(text) {
+      status.textContent = text || "";
+    }
 
     function refresh() {
       fetch(listUrl)
@@ -81,11 +86,11 @@
         .then(function (data) {
           list.textContent = "";
           if (!data.ok) {
-            status.textContent = data.error || "留言加载失败";
+            setStatus(data.error || "留言加载失败");
             return;
           }
           if (!data.comments.length) {
-            list.appendChild(h("p", "comments-empty", "还没有留言，来抢个沙发吧～"));
+            list.appendChild(h("p", "comments-empty", "还没有留言，来说第一句吧～"));
             return;
           }
           data.comments.forEach(function (c) {
@@ -93,19 +98,22 @@
           });
         })
         .catch(function () {
-          status.textContent = "留言加载失败，请稍后再试";
+          setStatus("留言加载失败，请稍后再试");
         });
     }
 
     function renderComment(c) {
       var wrap = h("div", "comment");
+
       var head = h("div", "comment-head");
-      head.appendChild(h("strong", "comment-author", c.author));
+      head.appendChild(h("span", "comment-author", c.author || "匿名同学"));
       head.appendChild(
         h("span", "comment-date",
           fmtDate(c.updated_at || c.created_at) + (c.updated_at ? " · 已编辑" : ""))
       );
+
       var body = h("div", "comment-body", c.body);
+
       wrap.appendChild(head);
       wrap.appendChild(body);
 
@@ -122,25 +130,28 @@
         editBtn.addEventListener("click", function () {
           var ta = document.createElement("textarea");
           ta.className = "comment-edit-box";
+          ta.maxLength = 1500;
           ta.value = c.body;
-          var bar = h("div", "comment-actions");
+
+          var editBar = h("div", "comment-actions");
           var save = h("button", "comment-link", "保存");
           var cancel = h("button", "comment-link", "取消");
           save.type = "button";
           cancel.type = "button";
-          bar.appendChild(save);
-          bar.appendChild(cancel);
+          editBar.appendChild(save);
+          editBar.appendChild(cancel);
+
           body.replaceWith(ta);
-          actions.replaceWith(bar);
+          actions.replaceWith(editBar);
+          ta.focus();
 
           save.addEventListener("click", function () {
             postJSON(apiBase + "/" + c.id + "/edit", {
               key: clientKey(),
               body: ta.value,
-              author: nameInput.value.trim(),
             })
               .then(function () { refresh(); })
-              .catch(function (err) { status.textContent = err.message; });
+              .catch(function (err) { setStatus(err.message); });
           });
           cancel.addEventListener("click", refresh);
         });
@@ -149,30 +160,35 @@
           if (!window.confirm("确定删除这条留言吗？")) return;
           postJSON(apiBase + "/" + c.id + "/delete", { key: clientKey() })
             .then(function () { refresh(); })
-            .catch(function (err) { status.textContent = err.message; });
+            .catch(function (err) { setStatus(err.message); });
         });
       }
+
       return wrap;
     }
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var body = bodyInput.value.trim();
-      if (!body) return;
-      status.textContent = "发布中…";
-      postJSON(apiBase + "/" + offering, {
-        body: body,
-        author: nameInput.value.trim(),
-        key: clientKey(),
-      })
+      if (!body) {
+        setStatus("留言内容不能为空");
+        bodyInput.focus();
+        return;
+      }
+
+      submit.disabled = true;
+      setStatus("发布中…");
+
+      postJSON(apiBase + "/" + offering, { body: body, key: clientKey() })
         .then(function () {
-          localStorage.setItem(NAME_STORE, nameInput.value.trim());
           bodyInput.value = "";
-          status.textContent = "已发布 ✓";
+          submit.disabled = false;
+          setStatus("");
           refresh();
         })
         .catch(function (err) {
-          status.textContent = err.message || "发布失败";
+          submit.disabled = false;
+          setStatus(err.message || "发布失败");
         });
     });
 

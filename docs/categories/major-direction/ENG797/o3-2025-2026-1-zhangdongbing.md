@@ -6,8 +6,6 @@ title: 句法学 · 张东冰 · 2025-2026-1
 
 **2025-2026-1 · 张东冰**
 
-[✏️ 编辑本页信息](/notebook-admin/public/offering/3)
-
 | 字段 | 内容 |
 |------|------|
 | 课程代码 | ENG797 |
@@ -15,10 +13,8 @@ title: 句法学 · 张东冰 · 2025-2026-1
 | 任课教师 | 张东冰 |
 | 学期 | 2025-2026-1 |
 | 开课学院 | 英语学院 |
-| 总课时 / 周课时 | 待补充 / 待补充 |
-| 教学周数 | 待补充 |
-
-[← 返回课程总览](index.md)
+| 总课时 / 周课时 | 32 / 2 |
+| 教学周数 | 16 |
 
 ## 考核方式
 
@@ -66,8 +62,8 @@ The final exam includes:
 |------|------|------|----------|----------|------|
 | 9.17 | 1 | 2 | 研讨 | Introducing syntax — Kuiper & Nokes Ch.1 (12 pages) |  |
 | 9.24 | 2 | 2 | 研讨 | Object of study — Kuiper & Nokes Ch.2 (17 pages) |  |
-| 10.1 | 3 | 2 |  | National holiday |  |
-| 10.8 | 4 | 2 |  | National holiday |  |
+| 10.1 | 3 | 2 | National holiday |  |  |
+| 10.8 | 4 | 2 | National holiday |  |  |
 | 10.11 | 4 | 2 | 研讨 | Syntax and SFG — Bloor & Bloor Ch.1-2 (40 pages) | 国庆补课 |
 | 10.15 | 5 | 2 | 研讨 | Basic systems: PRONOUN — Martin Ch.2 (18 pages) | Test |
 | 10.22 | 6 | 2 | 研讨 | System and structure: MOOD — Martin Ch.3 (20 pages) |  |
@@ -75,20 +71,20 @@ The final exam includes:
 | 11.5 | 8 | 2 | 研讨 | Phenotypes and cryptotypes — Whorf (11 pages) |  |
 | 11.12 | 9 | 2 | 研讨 | Enation and agnation — Gleason (27 pages) |  |
 | 11.19 | 10 | 2 | 研讨 | Cryptogrammar: TRANSITIVITY — Martin et al. §5.2 (20 pages) |  |
-| 11.26 | 11 | 2 |  | Zhang at conference (25-30 Nov) |  |
+| 11.26 | 11 | 2 | Zhang at conference (25-30 Nov) |  |  |
 | 12.3 | 12 | 2 | 研讨 | Cryptogrammar: TRANSITIVITY — Martin et al. §5.2 (20 pages) | Assignment due |
-| 12.4 | 12 | 2 |  | Tutorial | 出差补课 |
+| 12.4 | 12 | 2 | Tutorial | 出差补课 |  |
 | 12.10 | 13 | 2 | 研讨 | Information flow: THEME — Martin et al. §6.2 (18 pages) |  |
 | 12.17 | 14 | 2 | 研讨 | Recursive system: TENSE — Martin et al. §3.2 (18 pages) |  |
 | 12.24 | 15 | 2 | 研讨 | Syntax and discourse — Martin Ch.5 (22 pages) |  |
 | 12.31 | 16 | 2 | 考试 | Final |  |
 
-## 留言 · 学习心得
+## 留言
 
-欢迎留下你对这门课的真实感受、经验或建议。发布后可以随时修改或删除自己的留言。
-
-<div class="course-comments" data-offering="3" data-api="/notebook-admin/api/comments"><p>留言加载中…</p></div>
+<div class="course-comments" data-offering="3" data-api="/notebook-admin/api/comments"></div>
 
 ---
 
-*最后更新：2026-06-17 · 信息来源：2023 级培养方案*
+*最后更新：2026-11-18 · 信息来源：2023 级培养方案*
+
+[✏️ 编辑本页信息](/notebook-admin/public/offering/3){: .edit-page-link }

@@ -6,8 +6,6 @@ title: 语用学 · 向明友 · 2025-2026-2
 
 **2025-2026-2 · 向明友**
 
-[✏️ 编辑本页信息](/notebook-admin/public/offering/1)
-
 | 字段 | 内容 |
 |------|------|
 | 课程代码 | ENG820 |
@@ -17,8 +15,6 @@ title: 语用学 · 向明友 · 2025-2026-2
 | 开课学院 | 英语学院 |
 | 总课时 / 周课时 | 32 / 2 |
 | 教学周数 | 16 |
-
-[← 返回课程总览](index.md)
 
 ## 考核方式
 
@@ -45,12 +41,12 @@ title: 语用学 · 向明友 · 2025-2026-2
 | 6.17 | 15 | 2 | 研讨 | Review & Discussion | 教师主讲 |
 | 待定 | 16 | 2 | 考试 | 期末考核 |  |
 
-## 留言 · 学习心得
+## 留言
 
-欢迎留下你对这门课的真实感受、经验或建议。发布后可以随时修改或删除自己的留言。
-
-<div class="course-comments" data-offering="1" data-api="/notebook-admin/api/comments"><p>留言加载中…</p></div>
+<div class="course-comments" data-offering="1" data-api="/notebook-admin/api/comments"></div>
 
 ---
 
 *最后更新：2026-11-18 · 信息来源：2023 级培养方案*
+
+[✏️ 编辑本页信息](/notebook-admin/public/offering/1){: .edit-page-link }

@@ -12,7 +12,7 @@
 - [跨文化交际导论（英） `ENG817`](../categories/basic-elective/ENG817/o13-daikaoju-shixingsong.md) · 待考据
 
 ## 向明友
-*英语学院 · 语言学系*
+*教授 · 英语学院 · 语言学系*
 
 - [语用学 `ENG820`](../categories/major-direction/ENG820/o1-2025-2026-2-xiangmingyou.md) · 2025-2026-2
 
@@ -46,13 +46,13 @@
 ## 李若珊
 *英语学院*
 
-- [英语文体学 `ENG366`](../categories/major-direction/ENG366/o9-daikaoju-liruoshan.md) · 待考据
+- [英语文体学 `ENG366`](../categories/major-direction/ENG366/o9-2025-2026-1-liruoshan.md) · 2025-2026-1
 
 ## 石小军
 *英语学院*
 
 - [新闻编辑（英） `ENG450`](../categories/major-direction/ENG450/o10-daikaoju-shixiaojun.md) · 待考据
-- [英语语言史 `ENG837`](../categories/major-direction/ENG837/o18-daikaoju-shixiaojun.md) · 待考据
+- [英语语言史 `ENG837`](../categories/major-direction/ENG837/o18-2024-2025-2-shixiaojun.md) · 2024-2025-2
 
 ## 董琳
 *英语学院*
