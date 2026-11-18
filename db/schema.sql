@@ -1,8 +1,7 @@
 CREATE TABLE IF NOT EXISTS teachers (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    department TEXT,
-    title TEXT
+    department TEXT
 );
 
 CREATE TABLE IF NOT EXISTS semesters (

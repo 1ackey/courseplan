@@ -24,10 +24,10 @@ def init_schema(conn):
 def seed_data(conn):
     # Teachers
     teachers = [
-        ("向明友", "英语学院 · 语言学系", "教授"),
+        ("向明友", "英语学院 · 语言学系"),
     ]
     conn.executemany(
-        "INSERT OR IGNORE INTO teachers (name, department, title) VALUES (?, ?, ?)",
+        "INSERT OR IGNORE INTO teachers (name, department) VALUES (?, ?)",
         teachers,
     )
 

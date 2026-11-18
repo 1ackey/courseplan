@@ -265,7 +265,7 @@ def build_category_index(category, dir_name, conn):
 
 def build_teacher_index(conn):
     teachers = conn.execute("""
-        SELECT DISTINCT t.id, t.name, t.department, t.title
+        SELECT DISTINCT t.id, t.name, t.department
         FROM teachers t
         JOIN course_offerings co ON co.teacher_id = t.id
         ORDER BY t.name
@@ -288,9 +288,8 @@ def build_teacher_index(conn):
     lines = ["# 教师索引", ""]
     for t in teachers:
         lines.append(f"## {t['name']}")
-        if t["title"] or t["department"]:
-            parts = [p for p in [t["title"], t["department"]] if p]
-            lines.append(f"*{' · '.join(parts)}*")
+        if t["department"]:
+            lines.append(f"*{t['department']}*")
         lines.append("")
 
         offerings = conn.execute("""

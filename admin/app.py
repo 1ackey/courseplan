@@ -44,6 +44,8 @@ def get_db():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
+    # 面板与定时同步/导出脚本会同时访问数据库，给它一点等待时间而不是立刻报 locked
+    conn.execute("PRAGMA busy_timeout = 5000")
     return conn
 
 
@@ -459,13 +461,19 @@ def teacher_list():
 def teacher_new():
     if request.method == "POST":
         conn = get_db()
-        conn.execute(
-            "INSERT INTO teachers (name, department, title) VALUES (?, ?, ?)",
-            (request.form["name"], request.form["department"], request.form["title"]),
-        )
-        conn.commit()
-        conn.close()
-        flash("教师已添加", "success")
+        try:
+            conn.execute(
+                "INSERT INTO teachers (name, department) VALUES (?, ?)",
+                (request.form["name"].strip(),
+                 (request.form.get("department") or "").strip() or None),
+            )
+            conn.commit()
+            flash("教师已添加", "success")
+        except sqlite3.Error as e:
+            conn.rollback()
+            flash(f"添加失败：{e}", "error")
+        finally:
+            conn.close()
         return redirect(url_for("teacher_list"))
     return render_template("teacher_form.html", teacher=None)
 
@@ -474,13 +482,20 @@ def teacher_new():
 def teacher_edit(teacher_id):
     conn = get_db()
     if request.method == "POST":
-        conn.execute(
-            "UPDATE teachers SET name=?, department=?, title=? WHERE id=?",
-            (request.form["name"], request.form["department"], request.form["title"], teacher_id),
-        )
-        conn.commit()
-        conn.close()
-        flash("教师已更新", "success")
+        try:
+            conn.execute(
+                "UPDATE teachers SET name=?, department=? WHERE id=?",
+                (request.form["name"].strip(),
+                 (request.form.get("department") or "").strip() or None,
+                 teacher_id),
+            )
+            conn.commit()
+            flash("教师已更新", "success")
+        except sqlite3.Error as e:
+            conn.rollback()
+            flash(f"更新失败：{e}", "error")
+        finally:
+            conn.close()
         return redirect(url_for("teacher_list"))
     teacher = conn.execute("SELECT * FROM teachers WHERE id=?", (teacher_id,)).fetchone()
     conn.close()
@@ -493,10 +508,25 @@ def teacher_edit(teacher_id):
 @app.route("/teachers/<int:teacher_id>/delete", methods=["POST"])
 def teacher_delete(teacher_id):
     conn = get_db()
-    conn.execute("DELETE FROM teachers WHERE id=?", (teacher_id,))
-    conn.commit()
-    conn.close()
-    flash("教师已删除", "success")
+    try:
+        used = conn.execute(
+            "SELECT COUNT(*) FROM course_offerings WHERE teacher_id=?", (teacher_id,)
+        ).fetchone()[0]
+        if used:
+            flash(f"该教师还有 {used} 条开课记录，请先删除这些开课记录", "error")
+            return redirect(url_for("teacher_list"))
+        cur = conn.execute("DELETE FROM teachers WHERE id=?", (teacher_id,))
+        if cur.rowcount == 0:
+            conn.rollback()
+            flash("教师不存在", "error")
+        else:
+            conn.commit()
+            flash("教师已删除", "success")
+    except sqlite3.Error as e:
+        conn.rollback()
+        flash(f"删除失败：{e}", "error")
+    finally:
+        conn.close()
     return redirect(url_for("teacher_list"))
 
 
@@ -556,10 +586,21 @@ def semester_edit(semester_id):
 @app.route("/semesters/<int:semester_id>/delete", methods=["POST"])
 def semester_delete(semester_id):
     conn = get_db()
-    conn.execute("DELETE FROM semesters WHERE id=?", (semester_id,))
-    conn.commit()
-    conn.close()
-    flash("学期已删除", "success")
+    try:
+        used = conn.execute(
+            "SELECT COUNT(*) FROM course_offerings WHERE semester_id=?", (semester_id,)
+        ).fetchone()[0]
+        if used:
+            flash(f"该学期还有 {used} 条开课记录，请先删除这些开课记录", "error")
+            return redirect(url_for("semester_list"))
+        conn.execute("DELETE FROM semesters WHERE id=?", (semester_id,))
+        conn.commit()
+        flash("学期已删除", "success")
+    except sqlite3.Error as e:
+        conn.rollback()
+        flash(f"删除失败：{e}", "error")
+    finally:
+        conn.close()
     return redirect(url_for("semester_list"))
 
 
@@ -641,10 +682,21 @@ def course_edit(course_id):
 @app.route("/courses/<int:course_id>/delete", methods=["POST"])
 def course_delete(course_id):
     conn = get_db()
-    conn.execute("DELETE FROM courses WHERE id=?", (course_id,))
-    conn.commit()
-    conn.close()
-    flash("课程已删除", "success")
+    try:
+        used = conn.execute(
+            "SELECT COUNT(*) FROM course_offerings WHERE course_id=?", (course_id,)
+        ).fetchone()[0]
+        if used:
+            flash(f"该课程还有 {used} 条开课记录，请先删除这些开课记录", "error")
+            return redirect(url_for("course_list"))
+        conn.execute("DELETE FROM courses WHERE id=?", (course_id,))
+        conn.commit()
+        flash("课程已删除", "success")
+    except sqlite3.Error as e:
+        conn.rollback()
+        flash(f"删除失败：{e}", "error")
+    finally:
+        conn.close()
     return redirect(url_for("course_list"))
 
 
