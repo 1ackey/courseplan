@@ -79,10 +79,6 @@ The final exam includes:
 | 12.24 | 15 | 2 | 研讨 | Syntax and discourse — Martin Ch.5 (22 pages) |  |
 | 12.31 | 16 | 2 | 考试 | Final |  |
 
-## 留言
-
-<div class="course-comments" data-offering="3" data-api="/notebook-admin/api/comments"></div>
-
 ---
 
 *最后更新：2026-11-18 · 信息来源：2023 级培养方案*

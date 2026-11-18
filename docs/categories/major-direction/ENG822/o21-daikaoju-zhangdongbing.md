@@ -20,10 +20,6 @@ title: 话语分析 · 张东冰 · 待考据
 
 —
 
-## 留言
-
-<div class="course-comments" data-offering="21" data-api="/notebook-admin/api/comments"></div>
-
 ---
 
 *最后更新：2026-06-17 · 信息来源：2023 级培养方案*

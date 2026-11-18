@@ -24,10 +24,6 @@ title: 传播学导论（英） · 付涛 · 待考据
 
 期末开卷，但老师不发资料，需要上课记笔记。
 
-## 留言
-
-<div class="course-comments" data-offering="11" data-api="/notebook-admin/api/comments"></div>
-
 ---
 
 *最后更新：2026-06-17 · 信息来源：2023 级培养方案*

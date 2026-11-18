@@ -24,10 +24,6 @@ title: 新闻编辑（英） · 石小军 · 待考据
 
 期末个人2000字论文，内容是是对个人在本学期新闻编辑中的思考与收获。
 
-## 留言
-
-<div class="course-comments" data-offering="10" data-api="/notebook-admin/api/comments"></div>
-
 ---
 
 *最后更新：2026-06-17 · 信息来源：2023 级培养方案*

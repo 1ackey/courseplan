@@ -32,10 +32,6 @@ title: 欧美戏剧（英） · 李啸初 · 待考据
 
 - [参考书] 可以参考相关剧本，无标准参考教材
 
-## 留言
-
-<div class="course-comments" data-offering="8" data-api="/notebook-admin/api/comments"></div>
-
 ---
 
 *最后更新：2026-06-17 · 信息来源：2023 级培养方案*

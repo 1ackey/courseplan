@@ -24,10 +24,6 @@ title: 新媒体理论与实践 · 付涛 · 待考据
 
 期末为两到三人一组做一个8-10分钟左右的视频。
 
-## 留言
-
-<div class="course-comments" data-offering="14" data-api="/notebook-admin/api/comments"></div>
-
 ---
 
 *最后更新：2026-06-17 · 信息来源：2023 级培养方案*
