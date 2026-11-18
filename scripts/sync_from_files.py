@@ -21,6 +21,7 @@ from import_existing import (  # noqa: E402
     DOCS_DIR,
     CATEGORY_DIRS,
     get_db,
+    normalize_image_paths,
     parse_first_field_table,
     parse_weekly_table,
     parse_textbook_list,
@@ -176,7 +177,7 @@ def sync_all():
                     continue
                 path = os.path.join(root, fname)
                 with open(path, "r", encoding="utf-8") as f:
-                    text = f.read()
+                    text = normalize_image_paths(f.read())
 
                 hint = None
                 if root != dir_path:  # generated per-offering page: o<id>-...

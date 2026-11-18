@@ -85,6 +85,12 @@ def main():
             else:
                 run([GIT, "reset", "--hard", "origin/main"])
 
+            # restart the panel when the code it runs changed
+            old_head = git_out("rev-parse", "ORIG_HEAD") or git_out("rev-parse", "HEAD~1")
+            code_changed = git_out("diff", "--name-only", old_head, "HEAD", "--", "admin", "scripts")
+            if code_changed and os.environ.get("COURSEPLAN_RESTART_PANEL") == "1":
+                run(["sudo", "-n", "systemctl", "restart", "notebook-admin"], check=False)
+
             # 1. md edits from GitHub → DB
             run([PY, os.path.join(BASE, "scripts", "sync_from_files.py")])
             # 2. DB → md (normalizes the working tree to match the DB)

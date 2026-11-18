@@ -37,6 +37,13 @@ def get_db():
     return conn
 
 
+def normalize_image_paths(text):
+    """Pages move one level deeper when a course becomes DB-managed
+    (docs/categories/<dir>/<CODE>/file.md), so legacy relative image
+    links need one more ../. Idempotent."""
+    return text.replace("(../../images/", "(../../../images/")
+
+
 def parse_field_table(section_text):
     fields = {}
     for line in section_text.splitlines():
@@ -200,7 +207,7 @@ def get_or_create_semester(conn, name):
 
 def migrate_file(conn, path, code, category):
     with open(path, "r", encoding="utf-8") as f:
-        text = f.read()
+        text = normalize_image_paths(f.read())
 
     # Already has an offering? skip.
     existing = conn.execute(

@@ -14,3 +14,8 @@
 *英语学院*
 
 - [商学导论（英） `ENG158`](../categories/major-direction/ENG158/o2-2025-2026-2-xufan.md) · 2025-2026-2
+
+## 李若珊
+*英语学院*
+
+- [英语文体学 `ENG366`](../categories/major-direction/ENG366/o7-2025-2026-2-liruoshan.md) · 2025-2026-2

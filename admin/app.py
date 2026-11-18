@@ -13,6 +13,7 @@ import hmac
 import io
 import json
 import os
+import re
 import subprocess
 import sys
 import sqlite3
@@ -289,12 +290,13 @@ def apply_payload(conn, payload):
         cur = conn.execute(
             """INSERT INTO course_offerings
                (course_id, teacher_id, semester_id, total_hours, weekly_hours,
-                teaching_weeks, assessment_method, info_source)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                teaching_weeks, assessment_method, info_source, updated_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, date('now'))""",
             (course["id"], teacher_id, semester_id, f["total_hours"], f["weekly_hours"],
              f["teaching_weeks"], f["assessment_method"], f["info_source"]),
         )
         insert_offering_children(conn, cur.lastrowid, payload)
+        merge_hand_page_into_offering(conn, payload["course_code"], cur.lastrowid, payload)
         return cur.lastrowid
     if action == "delete_offering":
         conn.execute("DELETE FROM course_offerings WHERE id=?", (payload["offering_id"],))
@@ -315,6 +317,87 @@ def maybe_publish():
     if os.environ.get("COURSEPLAN_AUTO_PUBLISH") == "1":
         return run_publish()
     return None
+
+
+CATEGORY_DIR_MAP = {
+    "基础必修": "basic-required",
+    "基础选修": "basic-elective",
+    "专业方向课": "major-direction",
+    "实验课": "lab",
+}
+
+
+def merge_hand_page_into_offering(conn, code, offering_id, payload):
+    """Carry hand-written page content into a newly created offering.
+
+    Form-provided values win; the hand-written page fills the gaps
+    (assessment, hours, weekly plans, textbooks). The flat page itself is
+    left in place and gets replaced by the generated course structure at
+    the next export — its content now lives in the database.
+    """
+    import scripts.import_existing as imp
+
+    course = conn.execute("SELECT category FROM courses WHERE code=?", (code,)).fetchone()
+    dir_name = CATEGORY_DIR_MAP.get(course["category"]) if course else None
+    if not dir_name:
+        return
+    path = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        "docs", "categories", dir_name, f"{code}.md",
+    )
+    if not os.path.exists(path):
+        return
+    with open(path, "r", encoding="utf-8") as fh:
+        text = imp.normalize_image_paths(fh.read())
+
+    fields = imp.parse_first_field_table(text)
+    sections = imp.split_sections(text)
+    hand_assessment = sections.get("考核方式", "").strip()
+    hand_plans = imp.parse_weekly_table(sections.get("教学进度", ""))
+    hand_books = imp.parse_textbook_list(sections.get("教材及参考资料", ""))
+    m = re.search(r"信息来源：([^\n*]+)", text)
+    hand_source = m.group(1).strip().rstrip("*").strip() if m else ""
+
+    f = payload.get("fields", {})
+    updates = {}
+    if not f.get("assessment_method") and hand_assessment:
+        updates["assessment_method"] = hand_assessment
+    if not f.get("total_hours") or not f.get("weekly_hours"):
+        hm = re.match(r"^(\d+)\s*/\s*(\d+)$",
+                      (fields.get("总课时 / 周课时", "") or "").replace("／", "/"))
+        if hm:
+            updates.setdefault("total_hours", int(hm.group(1)))
+            updates.setdefault("weekly_hours", int(hm.group(2)))
+    if not f.get("teaching_weeks"):
+        wm = fields.get("教学周数", "")
+        if wm and wm != "待补充":
+            try:
+                updates["teaching_weeks"] = int(wm)
+            except ValueError:
+                pass
+    if not f.get("info_source") and hand_source:
+        updates["info_source"] = hand_source
+    if updates:
+        sets = ", ".join(f"{k}=?" for k in updates)
+        conn.execute(
+            f"UPDATE course_offerings SET {sets} WHERE id=?",
+            (*updates.values(), offering_id),
+        )
+    if not payload.get("weekly_plans") and hand_plans:
+        for p in hand_plans:
+            conn.execute(
+                """INSERT INTO weekly_plans
+                   (offering_id, week_number, date, hours, teaching_method, content, notes)
+                   VALUES (?, ?, ?, ?, ?, ?, ?)""",
+                (offering_id, p["week_number"], p["date"], p["hours"],
+                 p["teaching_method"], p["content"], p["notes"]),
+            )
+    if not payload.get("textbooks") and hand_books:
+        for i, (btype, desc) in enumerate(hand_books):
+            conn.execute(
+                "INSERT INTO textbooks (offering_id, type, description, sort_order) VALUES (?, ?, ?, ?)",
+                (offering_id, btype, desc, i),
+            )
 
 
 
@@ -596,11 +679,11 @@ def offering_new():
     conn = get_db()
     if request.method == "POST":
         try:
-            conn.execute(
+            cur = conn.execute(
                 """INSERT INTO course_offerings
                    (course_id, teacher_id, semester_id, total_hours, weekly_hours,
-                    teaching_weeks, assessment_method, info_source)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                    teaching_weeks, assessment_method, info_source, updated_at)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, date('now'))""",
                 (
                     int(request.form["course_id"]),
                     int(request.form["teacher_id"]),
@@ -612,6 +695,20 @@ def offering_new():
                     request.form.get("info_source", ""),
                 ),
             )
+            course_code = conn.execute(
+                "SELECT code FROM courses WHERE id=?", (int(request.form["course_id"]),)
+            ).fetchone()["code"]
+            merge_hand_page_into_offering(conn, course_code, cur.lastrowid, {
+                "fields": {
+                    "total_hours": int(request.form["total_hours"]),
+                    "weekly_hours": int(request.form["weekly_hours"]),
+                    "teaching_weeks": int(request.form["teaching_weeks"]),
+                    "assessment_method": request.form["assessment_method"],
+                    "info_source": request.form.get("info_source", ""),
+                },
+                "weekly_plans": [],
+                "textbooks": [],
+            })
             conn.commit()
             flash("开课记录已添加", "success")
         except sqlite3.IntegrityError:
@@ -1082,6 +1179,25 @@ def public_offering_new(code):
         return render_template("public_locked.html"), 403
     conn = get_db()
     course = conn.execute("SELECT * FROM courses WHERE code=?", (code,)).fetchone()
+    if not course and re.match(r"^[A-Z]{2,4}\d{3}$", code or ""):
+        # The page may exist on GitHub without a DB record yet; register it
+        # using its docs directory as the category.
+        base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        for d, cat in {"basic-required": "基础必修", "basic-elective": "基础选修",
+                       "major-direction": "专业方向课", "lab": "实验课"}.items():
+            p = os.path.join(base, "docs", "categories", d, f"{code}.md")
+            if os.path.exists(p):
+                with open(p, "r", encoding="utf-8") as fh:
+                    text = fh.read()
+                m = re.match(r"^---\n.*?^title:\s*(.+?)$", text, re.MULTILINE | re.DOTALL)
+                name = m.group(1).strip() if m else code
+                conn.execute(
+                    "INSERT INTO courses (code, name, category, subcategory, department) VALUES (?, ?, ?, NULL, '英语学院')",
+                    (code, name, cat),
+                )
+                conn.commit()
+                course = conn.execute("SELECT * FROM courses WHERE code=?", (code,)).fetchone()
+                break
     if not course:
         conn.close()
         return render_template("public_done.html", ok=False, message="课程不存在"), 404
