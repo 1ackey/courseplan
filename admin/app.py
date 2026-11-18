@@ -8,6 +8,8 @@ Also hosts the public editing UI and the management-mode system:
 - Mode 3: read-only for everyone except the admin panel.
 """
 import csv
+import hashlib
+import hmac
 import io
 import json
 import os
@@ -83,7 +85,7 @@ def admin_required(fn):
 
 @app.before_request
 def auth_guard():
-    public_prefixes = ("/login", "/logout", "/static", "/public")
+    public_prefixes = ("/login", "/logout", "/static", "/public", "/webhook")
     if request.path.startswith(public_prefixes):
         return None
     if not is_admin():
@@ -1165,6 +1167,37 @@ def public_offering_new(code):
     return render_template(
         "public_new_form.html", course=course, semesters=semesters, mode=mode,
     )
+
+
+# ─── GitHub webhook (pull-driven hot update) ──────────────────────────
+
+@app.route("/webhook/github", methods=["POST"])
+def github_webhook():
+    secret = os.environ.get("GITHUB_WEBHOOK_SECRET", "")
+    signature = request.headers.get("X-Hub-Signature-256", "")
+    if not secret:
+        return "webhook not configured", 403
+    mac = hmac.new(secret.encode(), request.get_data(), hashlib.sha256)
+    if not hmac.compare_digest("sha256=" + mac.hexdigest(), signature):
+        return "bad signature", 403
+    if request.headers.get("X-GitHub-Event") != "push":
+        return "ignored event", 200
+    payload = request.get_json(silent=True) or {}
+    if payload.get("ref") != "refs/heads/main":
+        return "ignored ref", 200
+
+    # Don't loop on the commits the publish pipeline itself pushed.
+    msgs = [c.get("message", "") for c in payload.get("commits", [])]
+    if msgs and all(m.startswith("publish:") for m in msgs):
+        return "publish commits skipped", 200
+
+    base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    with open(os.devnull, "w") as devnull:
+        subprocess.Popen(
+            [sys.executable, os.path.join(base, "scripts", "sync_from_github.py")],
+            cwd=base, stdout=devnull, stderr=devnull,
+        )
+    return "sync started", 202
 
 
 # ─── Publish ──────────────────────────────────────────────────────────
