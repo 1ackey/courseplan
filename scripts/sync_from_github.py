@@ -12,6 +12,9 @@ import time
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PY = sys.executable
 GIT = os.environ.get("COURSEPLAN_GIT_BIN", "git")
+# Abort stalled transfers quickly instead of holding the lock for minutes.
+GIT_NET = [GIT, "-c", "http.lowSpeedLimit=1000", "-c", "http.lowSpeedTime=30",
+           "-c", "http.version=HTTP/1.1"]
 LOCK = os.path.join(BASE, ".sync.lock")
 LOCK_STALE_SECONDS = 900
 
@@ -58,7 +61,7 @@ def main():
         return
 
     try:
-        run_with_retry([GIT, "fetch", "origin", "main"])
+        run_with_retry([*GIT_NET, "fetch", "origin", "main"])
 
         behind = git_out("rev-list", "--count", "HEAD..origin/main")
         ahead = git_out("rev-list", "--count", "origin/main..HEAD")
@@ -72,7 +75,7 @@ def main():
         if ahead > 0:
             # local commits (e.g. an earlier publish whose push failed)
             try:
-                run_with_retry([GIT, "push", "origin", "main"])
+                run_with_retry([*GIT_NET, "push", "origin", "main"])
             except SystemExit:
                 pass
 
