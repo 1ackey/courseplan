@@ -42,6 +42,26 @@ CATEGORY_DIRS = {
 }
 CATEGORY_ORDER = list(CATEGORY_DIRS)
 
+# 这些词表示"数据还没填"，在列表/导航里不该当成正常值显示出来
+PLACEHOLDER_MARKERS = ("待补充", "待考据", "待定", "未知", "暂无")
+
+
+def is_placeholder(value):
+    v = (value or "").strip()
+    if not v or v in ("—", "-", "－"):
+        return True
+    return any(marker in v for marker in PLACEHOLDER_MARKERS)
+
+
+def offering_label(semester, teacher):
+    """「学期 · 教师」，自动丢掉占位值；全空时返回空串。"""
+    parts = []
+    if not is_placeholder(semester):
+        parts.append(semester.strip())
+    if not is_placeholder(teacher):
+        parts.append(teacher.strip())
+    return " · ".join(parts)
+
 
 def get_db():
     conn = sqlite3.connect(DB_PATH)
@@ -131,8 +151,8 @@ def build_offering_markdown(course, offering, conn):
         f"| 任课教师 | {offering['teacher_name']} |",
         f"| 学期 | {offering['semester_name']} |",
         f"| 开课学院 | {course['department'] or '英语学院'} |",
-        f"| 总课时 / 周课时 | {offering['total_hours'] or '待补充'} / {offering['weekly_hours'] or '待补充'} |",
-        f"| 教学周数 | {offering['teaching_weeks'] or '待补充'} |",
+        f"| 总课时 / 周课时 | {offering['total_hours'] or '—'} / {offering['weekly_hours'] or '—'} |",
+        f"| 教学周数 | {offering['teaching_weeks'] or '—'} |",
         "",
     ]
 
@@ -140,7 +160,7 @@ def build_offering_markdown(course, offering, conn):
     lines.extend([
         "## 考核方式",
         "",
-        offering["assessment_method"] or "待补充。",
+        offering["assessment_method"] or "—",
         "",
     ])
 
@@ -228,8 +248,11 @@ def build_category_index(category, dir_name, conn):
     """).fetchall()
     for o in offerings:
         key = o["code"]
-        if key not in teacher_map:
-            teacher_map[key] = f"{o['teacher_name']} ({o['semester_name']})"
+        if key in teacher_map:
+            continue
+        label = offering_label(o["semester_name"], o["teacher_name"])
+        if label:
+            teacher_map[key] = label
 
     managed_codes = {
         row["code"]
@@ -347,7 +370,7 @@ def update_mkdocs_nav(conn):
                 lines.append(f"    - {code} {name}:")
                 lines.append(f"      - 课程总览: categories/{dir_name}/{code}/index.md")
                 for o in managed[code]:
-                    label = f"{o['semester_name']} · {o['teacher_name']}"
+                    label = offering_label(o['semester_name'], o['teacher_name']) or "开课记录"
                     lines.append(
                         f"      - {label}: categories/{dir_name}/{code}/{offering_filename(o)}"
                     )
