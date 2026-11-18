@@ -124,8 +124,6 @@ def build_offering_markdown(course, offering, conn):
         "",
         f"**{offering['semester_name']} · {offering['teacher_name']}**",
         "",
-        f"[✏️ 编辑本页信息]({EDIT_BASE}/public/offering/{offering['id']})",
-        "",
         "| 字段 | 内容 |",
         "|------|------|",
         f"| 课程代码 | {course['code']} |",
@@ -135,8 +133,6 @@ def build_offering_markdown(course, offering, conn):
         f"| 开课学院 | {course['department'] or '英语学院'} |",
         f"| 总课时 / 周课时 | {offering['total_hours'] or '待补充'} / {offering['weekly_hours'] or '待补充'} |",
         f"| 教学周数 | {offering['teaching_weeks'] or '待补充'} |",
-        "",
-        f"[← 返回课程总览](index.md)",
         "",
     ]
 
@@ -183,19 +179,20 @@ def build_offering_markdown(course, offering, conn):
 
     # Comments (rendered client-side, stored in the admin DB)
     lines.extend([
-        "## 留言 · 学习心得",
-        "",
-        "欢迎留下你对这门课的真实感受、经验或建议。发布后可以随时修改或删除自己的留言。",
+        "## 留言",
         "",
         f'<div class="course-comments" data-offering="{offering["id"]}"'
-        f' data-api="{EDIT_BASE}/api/comments"><p>留言加载中…</p></div>',
+        f' data-api="{EDIT_BASE}/api/comments"></div>',
         "",
     ])
 
+    # The edit entry sits at the very bottom so the page reads as content first.
     lines.extend([
         "---",
         "",
         f"*最后更新：{offering['updated_at']} · 信息来源：{offering['info_source'] or '2023 级培养方案'}*",
+        "",
+        f"[✏️ 编辑本页信息]({EDIT_BASE}/public/offering/{offering['id']}){{: .edit-page-link }}",
         "",
     ])
     return "\n".join(lines)
