@@ -27,6 +27,16 @@ def run(cmd, check=True):
     return r
 
 
+def run_with_retry(cmd, attempts=3, delay=5):
+    for i in range(attempts):
+        r = run(cmd, check=False)
+        if r.returncode == 0:
+            return r
+        print(f"  attempt {i + 1}/{attempts} failed, retrying in {delay}s")
+        time.sleep(delay)
+    raise SystemExit(f"step failed after {attempts} attempts: {' '.join(cmd)}")
+
+
 def git_out(*args):
     r = subprocess.run([GIT, *args], capture_output=True, text=True, cwd=BASE)
     return (r.stdout or "").strip()
@@ -48,7 +58,7 @@ def main():
         return
 
     try:
-        run([GIT, "fetch", "origin", "main"])
+        run_with_retry([GIT, "fetch", "origin", "main"])
 
         behind = git_out("rev-list", "--count", "HEAD..origin/main")
         ahead = git_out("rev-list", "--count", "origin/main..HEAD")
@@ -62,7 +72,7 @@ def main():
         if ahead > 0:
             # local commits (e.g. an earlier publish whose push failed)
             try:
-                run([GIT, "push", "origin", "main"])
+                run_with_retry([GIT, "push", "origin", "main"])
             except SystemExit:
                 pass
 
