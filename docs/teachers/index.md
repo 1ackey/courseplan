@@ -12,7 +12,7 @@
 - [跨文化交际导论（英） `ENG817`](../categories/basic-elective/ENG817/o13-daikaoju-shixingsong.md) · 待考据
 
 ## 向明友
-*教授 · 英语学院 · 语言学系*
+*英语学院 · 语言学系*
 
 - [语用学 `ENG820`](../categories/major-direction/ENG820/o1-2025-2026-2-xiangmingyou.md) · 2025-2026-2
 
