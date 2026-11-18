@@ -197,15 +197,6 @@ def build_offering_markdown(course, offering, conn):
             )
         lines.append("")
 
-    # Comments (rendered client-side, stored in the admin DB)
-    lines.extend([
-        "## 留言",
-        "",
-        f'<div class="course-comments" data-offering="{offering["id"]}"'
-        f' data-api="{EDIT_BASE}/api/comments"></div>',
-        "",
-    ])
-
     # The edit entry sits at the very bottom so the page reads as content first.
     lines.extend([
         "---",

@@ -81,18 +81,3 @@ CREATE TABLE IF NOT EXISTS submissions (
 );
 
 CREATE INDEX IF NOT EXISTS idx_submissions_status ON submissions(status);
-
-CREATE TABLE IF NOT EXISTS comments (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    offering_id INTEGER NOT NULL,
-    author TEXT NOT NULL DEFAULT '匿名同学',
-    body TEXT NOT NULL,
-    edit_key TEXT,
-    ip TEXT,
-    hidden INTEGER NOT NULL DEFAULT 0,
-    created_at TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
-    updated_at TEXT,
-    FOREIGN KEY (offering_id) REFERENCES course_offerings(id) ON DELETE CASCADE
-);
-
-CREATE INDEX IF NOT EXISTS idx_comments_offering ON comments(offering_id);
