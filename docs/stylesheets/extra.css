@@ -140,11 +140,12 @@
 .comments-bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 0.8rem;
 }
 
 .comments-status {
+  margin-right: auto;
   font-size: 0.65rem;
   line-height: 1.4;
   color: var(--md-default-fg-color--light);
@@ -277,6 +278,15 @@
 
 /* 手机端：输入框收紧、按钮整行，避免横向溢出 */
 @media screen and (max-width: 768px) {
+  /* 宽表格改为内部横向滚动，否则会把整页撑宽、留言框被截断 */
+  .md-typeset table:not([class]) {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .course-comments {
     max-width: none;
   }
